@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dik's Menu">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ddf0fc">
+<title>Dik's Coffee Shop — Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --b1:#f0faff;--b2:#daeeff;--b3:#acd8f5;--b4:#62aee0;--b5:#2674aa;--b6:#14527e;
+  --white:#ffffff;
+  --glass:rgba(255,255,255,0.60);
+  --glass2:rgba(255,255,255,0.82);
+  --glass3:rgba(255,255,255,0.95);
+  --border:rgba(98,174,224,0.20);
+  --border2:rgba(98,174,224,0.35);
+  --shadow:0 4px 24px rgba(20,82,126,0.10),0 1px 4px rgba(20,82,126,0.06);
+  --shadow2:0 12px 48px rgba(20,82,126,0.16),0 3px 12px rgba(20,82,126,0.08);
+  --shadow3:0 24px 72px rgba(20,82,126,0.22),0 6px 20px rgba(20,82,126,0.10);
+  --text:#0f2d42;--text2:#2a5570;--text3:#5a87a5;--text4:#8fb8d0;
+  --accent:#2674aa;--accent2:#62aee0;
+  --r:18px;--r2:24px;--r3:32px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(170deg,#eaf6ff 0%,#d5ecfb 25%,#f2faff 55%,#ddeef9 80%,#ebf7ff 100%);
+  min-height:100vh;color:var(--text);overflow-x:hidden;
+}
+
+/* ─── ANIMATED WATER BG ─── */
+.water-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wave{
+  position:absolute;border-radius:40%;
+  animation:waveAnim linear infinite;
+}
+.wave1{
+  width:250%;height:250%;
+  top:-120%;left:-80%;
+  background:radial-gradient(ellipse at center,rgba(172,216,245,0.22) 0%,transparent 70%);
+  animation-duration:22s;
+}
+.wave2{
+  width:200%;height:200%;
+  top:-60%;left:-50%;
+  background:radial-gradient(ellipse at 30% 40%,rgba(98,174,224,0.14) 0%,transparent 60%);
+  animation-duration:17s;animation-direction:reverse;
+}
+.wave3{
+  width:180%;height:180%;
+  bottom:-70%;right:-50%;
+  background:radial-gradient(ellipse at 70% 60%,rgba(38,116,170,0.10) 0%,transparent 60%);
+  animation-duration:26s;
+}
+@keyframes waveAnim{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+/* BUBBLES */
+.bubbles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bbl{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.92),rgba(172,216,245,0.25));
+  border:1px solid rgba(255,255,255,0.7);
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  0%{transform:translateY(105vh) scale(0.6);opacity:0}
+  8%{opacity:0.7}
+  92%{opacity:0.25}
+  100%{transform:translateY(-10vh) scale(1.1);opacity:0}
+}
+
+/* ─── MAIN WRAPPER ─── */
+#app{position:relative;z-index:1;min-height:100vh}
+
+/* ─── NAV ─── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:600;
+  background:rgba(234,246,255,0.82);
+  backdrop-filter:blur(24px) saturate(200%);
+  -webkit-backdrop-filter:blur(24px) saturate(200%);
+  border-bottom:1px solid var(--border2);
+  height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+  box-shadow:0 2px 20px rgba(20,82,126,0.08);
+}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-logo{
+  width:42px;height:42px;border-radius:13px;
+  overflow:hidden;border:2px solid rgba(255,255,255,0.9);
+  box-shadow:0 4px 14px rgba(20,82,126,0.18);
+  flex-shrink:0;background:#fff;
+}
+.nav-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.nav-brand{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:700;color:var(--text);
+  letter-spacing:-0.3px;line-height:1.2;
+}
+.nav-brand em{font-style:italic;color:var(--accent)}
+.nav-sub{font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+.nav-right{display:flex;align-items:center;gap:8px}
+
+/* TAP LOGO 3x SECRET ADMIN */
+.nav-logo{cursor:pointer;-webkit-user-select:none;user-select:none}
+.tap-indicator{
+  position:fixed;bottom:32px;left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:8px;z-index:9100;
+  opacity:0;transition:opacity 0.35s;
+  pointer-events:none;
+}
+.tap-indicator.visible{opacity:1}
+.tap-dot{
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(38,116,170,0.22);
+  border:1.5px solid rgba(38,116,170,0.35);
+  transition:background 0.18s,transform 0.18s,border-color 0.18s;
+}
+.tap-dot.lit{
+  background:var(--b5);border-color:var(--b5);
+  transform:scale(1.4);
+  box-shadow:0 0 8px rgba(38,116,170,0.45);
+}
+
+/* WA BUTTON */
+.btn-wa{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;border:none;cursor:pointer;
+  box-shadow:0 4px 14px rgba(37,211,102,0.38);
+  transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
+  flex-shrink:0;
+}
+.btn-wa:hover{transform:scale(1.13);box-shadow:0 6px 20px rgba(37,211,102,0.45)}
+.btn-wa svg{width:19px;height:19px;fill:white}
+
+
+
+/* ─── PAGES ─── */
+.page{display:none;padding-top:70px;padding-bottom:40px;min-height:100vh}
+.page.active{display:block;animation:pgIn 0.38s ease both}
+@keyframes pgIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── HERO ─── */
+.hero{
+  max-width:580px;margin:0 auto;
+  padding:20px 20px 4px;text-align:center;
+}
+.hero-logo{
+  width:108px;height:108px;border-radius:26px;
+  background:white;
+  box-shadow:var(--shadow3);
+  margin:0 auto 18px;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,0.95);
+  animation:logoFloat 3.5s ease-in-out infinite;
+}
+.hero-logo img{width:100%;height:100%;object-fit:cover}
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-9px) scale(1.01)}
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:30px;line-height:1.15;letter-spacing:-0.4px;
+  color:var(--text);
+}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-desc{color:var(--text2);font-size:14px;margin-top:8px;line-height:1.6}
+
+/* PILLS */
+.pills{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.pill{
+  background:var(--glass2);backdrop-filter:blur(12px);
+  border:1px solid var(--border2);border-radius:999px;
+  padding:6px 13px;font-size:12px;font-weight:700;color:var(--text2);
+  box-shadow:var(--shadow);
+}
+
+
+
+/* ─── MAIN CATEGORY CARDS ─── */
+.cat-wrap{max-width:580px;margin:22px auto 0;padding:0 20px}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+.cat-card{
+  background:var(--glass);backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1.5px solid rgba(255,255,255,0.75);border-radius:var(--r3);
+  padding:22px 10px 18px;text-align:center;cursor:pointer;
+  box-shadow:var(--shadow2);
+  transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s,border-color 0.2s;
+  position:relative;overflow:hidden;
+  animation:floatCard 4s ease-in-out infinite;
+}
+.cat-card:nth-child(2){animation-delay:-1.4s}
+.cat-card:nth-child(3){animation-delay:-2.7s}
+@keyframes floatCard{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+.cat-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(255,255,255,0.65) 0%,rgba(255,255,255,0) 55%);
+  pointer-events:none;border-radius:inherit;
+}
+.cat-card:hover{
+  transform:translateY(-12px) scale(1.03)!important;
+  box-shadow:var(--shadow3);border-color:var(--b3);
+}
+.cat-card:active{transform:scale(0.97)!important}
+.cat-icon{font-size:38px;display:block;margin-bottom:10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.1))}
+.cat-label{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--text);display:block;line-height:1.2}
+.cat-sub{font-size:10px;color:var(--text3);font-weight:600;margin-top:4px;display:block}
+
+/* EVENT SECTION */
+.evt-sec{max-width:580px;margin:28px auto 0;padding:0 20px}
+.sec-hd{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.sec-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--b4),var(--b5));flex-shrink:0}
+.sec-hd h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--text);letter-spacing:-0.3px}
+.sec-hd .hd-right{margin-left:auto}
+
+/* INFO CARD */
+.info-card{
+  background:var(--glass2);backdrop-filter:blur(18px);
+  border:1.5px solid var(--border2);border-radius:var(--r2);
+  padding:18px 20px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+  animation:floatCard 5s ease-in-out infinite;
+  margin-bottom:12px;
+}
+.info-card:nth-child(even){animation-delay:-2.5s}
+.info-card::after{
+  content:'';position:absolute;
+  top:-30px;right:-30px;width:110px;height:110px;
+  background:radial-gradient(circle,rgba(98,174,224,0.15) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.info-tag{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--b4),var(--b5));
+  color:white;font-size:10px;font-weight:800;
+  padding:3px 10px;border-radius:999px;letter-spacing:0.6px;
+  text-transform:uppercase;margin-bottom:9px;
+}
+.info-card h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);margin-bottom:5px}
+.info-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.info-meta{font-size:11px;color:var(--text3);font-weight:700;margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+
+.evt-empty{text-align:center;padding:40px 0;color:var(--text4)}
+.evt-empty span{font-size:40px;display:block;margin-bottom:10px;opacity:0.5}
+.evt-empty p{font-size:13px}
+
+/* ─── INNER PAGE WRAPPER ─── */
+.inner{max-width:580px;margin:0 auto;padding:16px 20px}
+
+/* BACK BUTTON */
+.back-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--glass2);backdrop-filter:blur(12px);
+  border:1.5px solid var(--border2);border-radius:999px;
+  padding:8px 18px;font-size:13px;font-weight:700;color:var(--text2);
+  cursor:pointer;box-shadow:var(--shadow);transition:all 0.2s;
+  margin-bottom:20px;
+}
+.back-btn:hover{background:white;color:var(--accent)}
+
+/* SUB TABS */
+.sub-tabs{
+  display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+  margin:0 -20px 18px;padding:0 20px 2px;
+}
+.sub-tabs::-webkit-scrollbar{display:none}
+.stab{
+  flex-shrink:0;
+  background:var(--glass2);backdrop-filter:blur(10px);
+  border:1.5px solid var(--border);border-radius:999px;
+  padding:7px 15px;font-size:12px;font-weight:700;color:var(--text3);
+  cursor:pointer;white-space:nowrap;transition:all 0.2s;
+  box-shadow:0 2px 8px rgba(20,82,126,0.07);
+}
+.stab:hover{border-color:var(--b3);color:var(--text2)}
+.stab.on{
+  background:linear-gradient(135deg,var(--b4),var(--b5));
+  border-color:transparent;color:white;
+  box-shadow:0 4px 16px rgba(38,116,170,0.32);
+}
+
+/* MENU GRID */
+.mgrid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+@media(min-width:480px){.mgrid{grid-template-columns:repeat(3,1fr)}}
+
+/* MENU CARD — FLOATING */
+.mc{
+  background:var(--glass2);
+  backdrop-filter:blur(22px) saturate(190%);
+  -webkit-backdrop-filter:blur(22px) saturate(190%);
+  border:1.5px solid rgba(255,255,255,0.85);
+  border-radius:var(--r2);overflow:hidden;
+  box-shadow:var(--shadow2);cursor:default;
+  transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s,border-color 0.2s;
+  position:relative;
+  animation:floatCard 4s ease-in-out infinite;
+}
+.mc:nth-child(2n){animation-delay:-2s}
+.mc:nth-child(3n){animation-delay:-0.8s}
+.mc:nth-child(4n){animation-delay:-3.2s}
+.mc::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(155deg,rgba(255,255,255,0.72) 0%,rgba(255,255,255,0) 55%);
+  pointer-events:none;border-radius:inherit;z-index:1;
+}
+.mc:hover{
+  transform:translateY(-10px) scale(1.02)!important;
+  box-shadow:var(--shadow3);border-color:var(--b3);
+}
+
+/* CARD IMAGE */
+.mc-img{
+  width:100%;height:132px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--b1),var(--b2));
+  display:flex;align-items:center;justify-content:center;
+}
+.mc-img img{width:100%;height:100%;object-fit:cover;display:block}
+.mc-emoji{font-size:50px;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.mc-badge{
+  position:absolute;top:8px;left:8px;z-index:2;
+  color:white;font-size:9px;font-weight:800;letter-spacing:0.5px;
+  padding:3px 8px;border-radius:999px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.18);
+}
+.mc-badge.new{background:linear-gradient(135deg,#ff6b6b,#cc2200)}
+.mc-badge.hot{background:linear-gradient(135deg,#f39c12,#c57a00)}
+
+/* ADMIN EDIT OVERLAY */
+.mc-admin{
+  position:absolute;top:7px;right:7px;z-index:3;
+  display:flex;gap:4px;opacity:0;transition:opacity 0.2s;
+}
+.mc:hover .mc-admin{opacity:1}
+body.guest .mc-admin{display:none!important}
+.mc{touch-action:manipulation}
+.pkcard{touch-action:manipulation}
+.edt-btn{
+  width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.edt-btn.edit{background:white;color:var(--accent)}
+.edt-btn.del{background:#e53935;color:white}
+
+/* CARD BODY */
+.mc-body{padding:11px 13px 13px;position:relative;z-index:2}
+.mc-name{font-weight:800;font-size:13px;line-height:1.3;color:var(--text)}
+.mc-desc{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4}
+.mc-price{
+  margin-top:10px;font-weight:800;font-size:15px;
+  color:var(--accent);letter-spacing:-0.3px;
+}
+
+/* PAKET CARD */
+.pkcard{
+  background:var(--glass2);
+  backdrop-filter:blur(22px) saturate(190%);
+  border:1.5px solid rgba(255,255,255,0.85);
+  border-radius:var(--r2);
+  display:flex;gap:14px;align-items:center;padding:14px;
+  box-shadow:var(--shadow2);margin-bottom:12px;
+  position:relative;overflow:hidden;
+  animation:floatCard 4s ease-in-out infinite;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s;
+}
+.pkcard:nth-child(2n){animation-delay:-2s}
+.pkcard:hover{transform:translateY(-8px)!important;box-shadow:var(--shadow3)}
+.pkcard::before{content:'';position:absolute;inset:0;background:linear-gradient(155deg,rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 55%);pointer-events:none}
+
+.pkimg{
+  width:78px;height:78px;border-radius:16px;
+  background:linear-gradient(135deg,var(--b1),var(--b2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;flex-shrink:0;overflow:hidden;
+  box-shadow:0 4px 14px rgba(20,82,126,0.12);
+}
+.pkimg img{width:100%;height:100%;object-fit:cover;border-radius:16px}
+.pkinfo{flex:1;min-width:0}
+.pkname{font-weight:800;font-size:14px;color:var(--text);line-height:1.3}
+.pkdesc{font-size:11.5px;color:var(--text3);margin-top:4px;line-height:1.5}
+.pkprice{font-weight:800;font-size:16px;color:var(--accent);margin-top:8px}
+.pksave{
+  display:inline-block;font-size:10px;font-weight:800;
+  background:rgba(39,174,96,0.12);color:#1e8449;
+  padding:3px 9px;border-radius:999px;margin-left:8px;
+}
+
+/* SYOK SECTION */
+.stok-sec{margin-top:26px}
+.stok-hd{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:12px;padding:10px 14px;
+  background:linear-gradient(135deg,rgba(98,174,224,0.1),rgba(172,216,245,0.08));
+  border:1px solid var(--border2);border-radius:14px;
+}
+.stok-hd h3{font-family:'Playfair Display',serif;font-size:15px;color:var(--text)}
+.stok-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stok-item{
+  background:var(--glass2);backdrop-filter:blur(14px);
+  border:1.5px solid rgba(255,255,255,0.85);border-radius:14px;
+  padding:12px 14px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:var(--shadow);
+  animation:floatCard 4.5s ease-in-out infinite;
+  position:relative;overflow:hidden;
+}
+.stok-item:nth-child(odd){animation-delay:-2.3s}
+.stok-item::before{content:'';position:absolute;inset:0;background:linear-gradient(155deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0) 60%);pointer-events:none}
+.stok-name{font-size:12px;font-weight:700;color:var(--text);position:relative;z-index:1}
+.stok-price{font-size:12px;font-weight:800;color:var(--accent);position:relative;z-index:1}
+
+/* ─── ADMIN ADD BUTTON ─── */
+.add-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px;margin-top:16px;
+  background:linear-gradient(135deg,rgba(38,116,170,0.06),rgba(98,174,224,0.05));
+  border:2px dashed rgba(98,174,224,0.38);border-radius:var(--r2);
+  font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;
+  transition:all 0.2s;
+}
+.add-btn:hover{background:rgba(38,116,170,0.09);border-color:var(--accent)}
+body.guest .add-btn{display:none!important}
+
+/* ─── SECTION LABEL ─── */
+.slabel{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Playfair Display',serif;font-size:17px;
+  color:var(--text);font-weight:700;margin-bottom:14px;
+  padding-bottom:8px;border-bottom:2px solid rgba(98,174,224,0.2);
+  width:100%;
+}
+
+/* ─── ADMIN BAR BOTTOM ─── */
+.admin-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:rgba(234,246,255,0.96);backdrop-filter:blur(22px);
+  border-top:1.5px solid rgba(38,116,170,0.2);
+  padding:12px 20px max(16px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 -4px 24px rgba(20,82,126,0.10);
+}
+body.guest .admin-bar{display:none!important}
+.admin-info{display:flex;align-items:center;gap:8px}
+.admin-dot{width:8px;height:8px;border-radius:50%;background:#25d366;animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.admin-lbl{font-size:12px;font-weight:700;color:var(--text2)}
+.admin-badge{background:linear-gradient(135deg,var(--b4),var(--b5));color:white;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px}
+.btn-logout{
+  background:rgba(229,57,53,0.09);border:1px solid rgba(229,57,53,0.2);
+  border-radius:999px;padding:7px 16px;
+  font-size:12px;font-weight:700;color:#c0392b;cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:all 0.2s;
+}
+.btn-logout:hover{background:rgba(229,57,53,0.15)}
+
+/* ─── MODAL ─── */
+.moverlay{
+  position:fixed;inset:0;
+  background:rgba(8,28,46,0.52);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  z-index:800;display:flex;align-items:flex-end;justify-content:center;
+  padding:0;opacity:0;pointer-events:none;transition:opacity 0.28s;
+}
+@media(min-width:500px){.moverlay{align-items:center;padding:20px}}
+.moverlay.on{opacity:1;pointer-events:all}
+.mbox{
+  background:linear-gradient(175deg,#f4faff,#e8f4fd);
+  border:1.5px solid rgba(255,255,255,0.92);
+  border-radius:28px 28px 0 0;
+  padding:8px 0 0;
+  width:100%;max-width:480px;max-height:92vh;overflow-y:auto;
+  box-shadow:0 -8px 60px rgba(14,56,90,0.22);
+  transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.32,0.72,0,1);
+}
+@media(min-width:500px){
+  .mbox{border-radius:28px;padding:0;transform:translateY(30px) scale(0.95);
+    box-shadow:0 32px 80px rgba(14,56,90,0.28);}
+  .moverlay.on .mbox{transform:translateY(0) scale(1)}
+}
+.moverlay.on .mbox{transform:translateY(0)}
+/* Handle bar for bottom sheet */
+.mbox::before{
+  content:'';display:block;
+  width:40px;height:4px;border-radius:2px;
+  background:rgba(38,116,170,0.2);
+  margin:12px auto 16px;
+}
+@media(min-width:500px){.mbox::before{display:none}}
+.mbox-inner{padding:0 22px 28px}
+.mbox h3{font-family:'Playfair Display',serif;font-size:19px;color:var(--text);margin-bottom:18px}
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px}
+.fc{
+  width:100%;padding:10px 13px;
+  background:rgba(255,255,255,0.82);border:1.5px solid var(--border2);
+  border-radius:12px;font-size:14px;font-family:'Nunito',sans-serif;
+  color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+  -webkit-appearance:none;
+}
+.fc:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(38,116,170,0.12)}
+select.fc{cursor:pointer}
+.img-drop{
+  border:2px dashed rgba(98,174,224,0.38);border-radius:14px;
+  padding:18px;text-align:center;cursor:pointer;
+  background:rgba(255,255,255,0.5);transition:all 0.2s;position:relative;
+}
+.img-drop:hover{border-color:var(--accent);background:rgba(38,116,170,0.04)}
+.img-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-drop p{font-size:13px;color:var(--text3);font-weight:600}
+.img-thumb{width:100%;max-height:120px;object-fit:cover;border-radius:10px;margin-top:10px;display:none}
+.mbtns{display:flex;gap:10px;margin-top:18px}
+.btn-save{
+  flex:1;padding:12px;
+  background:linear-gradient(135deg,var(--b4),var(--b5));
+  color:white;border:none;border-radius:13px;
+  font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;
+  box-shadow:0 5px 18px rgba(38,116,170,0.32);transition:transform 0.2s,box-shadow 0.2s;
+}
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(38,116,170,0.38)}
+.btn-cancel{
+  padding:12px 18px;
+  background:rgba(255,255,255,0.8);border:1.5px solid var(--border2);
+  border-radius:13px;font-size:13px;font-weight:700;color:var(--text2);
+  cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;
+}
+.btn-cancel:hover{background:white}
+
+.btn-export,.btn-import-lbl{
+  background:rgba(38,116,170,0.10);
+  border:1.5px solid rgba(38,116,170,0.25);
+  border-radius:999px;padding:7px 13px;
+  font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:all 0.2s;
+  white-space:nowrap;
+}
+.btn-export:hover,.btn-import-lbl:hover{background:rgba(38,116,170,0.18);border-color:var(--accent)}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:linear-gradient(135deg,var(--b5),var(--b6));
+  color:white;padding:11px 22px;border-radius:999px;
+  font-size:13px;font-weight:700;
+  opacity:0;transition:all 0.32s cubic-bezier(0.34,1.56,0.64,1);
+  z-index:9000;white-space:nowrap;pointer-events:none;
+  box-shadow:0 8px 28px rgba(20,82,126,0.35);
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* LOGIN MODAL */
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:40px}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text3);font-size:16px;background:none;border:none;padding:0}
+
+/* EMPTY */
+.empty{text-align:center;padding:42px 20px;color:var(--text4);grid-column:1/-1}
+.empty .ei{font-size:42px;display:block;margin-bottom:10px;opacity:0.45}
+.empty p{font-size:13px}
+</style>
+</head>
+<body class="guest">
+
+<!-- WATER & BUBBLES BG -->
+<div class="water-bg">
+  <div class="wave wave1"></div>
+  <div class="wave wave2"></div>
+  <div class="wave wave3"></div>
+</div>
+<div class="bubbles" id="bubbles"></div>
+
+<div id="app">
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-logo" id="nav-logo" onclick="tapLogo()">
+      <img id="logo-img" src="" alt="Dik's Logo">
+    </div>
+    <div>
+      <div class="nav-brand"><em>Dik's</em> Coffee Shop</div>
+      <div class="nav-sub">Est. 2019 · wmx</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a class="btn-wa" href="https://wa.me/6282313976974?text=Halo%20Dik's%20Coffee%20Shop!" target="_blank" title="Chat WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div class="page active" id="pg-home">
+  <div class="hero">
+    <div class="hero-logo">
+      <img id="hero-logo" src="" alt="Dik's Logo">
+    </div>
+    <h1>Selamat Datang<br>di <em>Dik's Coffee Shop</em></h1>
+    <p class="hero-desc">Nikmati cita rasa terbaik kami, sejak 2019.<br>Pesan ke kasir kami yang siap melayani. ☕</p>
+    <div class="pills">
+      <span class="pill">☕ Est. 2019</span>
+      
+      <span class="pill">🌿 Open Daily</span>
+      <span class="pill">🍽️ Dine In</span>
+    </div>
+  </div>
+  </div>
+
+  <div class="cat-wrap" style="margin-top:26px;margin-bottom:4px">
+    <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--text2);margin-bottom:14px;text-align:center">Pilih kategori untuk melihat menu ↓</p>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="gotoPage('minuman')">
+        <span class="cat-icon">☕</span>
+        <span class="cat-label">Minuman</span>
+        <span class="cat-sub">Kopi · Jus · Mocktail</span>
+      </div>
+      <div class="cat-card" onclick="gotoPage('makanan')">
+        <span class="cat-icon">🍽️</span>
+        <span class="cat-label">Makanan</span>
+        <span class="cat-sub">Rice · Steak · Burger</span>
+      </div>
+      <div class="cat-card" onclick="gotoPage('paket')">
+        <span class="cat-icon">🎁</span>
+        <span class="cat-label">Paket</span>
+        <span class="cat-sub">Bundel Hemat</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENT SECTION -->
+  <div class="evt-sec" style="margin-top:28px">
+    <div class="sec-hd">
+      <div class="sec-dot"></div>
+      <h2>Informasi & Event</h2>
+      <div class="hd-right">
+        <button class="add-btn" style="margin:0;padding:6px 14px;font-size:12px;border-radius:999px;width:auto;border-width:1.5px" onclick="openAddEvent()">✚ Tambah</button>
+      </div>
+    </div>
+    <div id="evt-list"></div>
+    <div id="evt-empty" class="evt-empty" style="display:none">
+      <span>📅</span>
+      <p>Belum ada event atau informasi terbaru.<br>Pantau terus ya!</p>
+    </div>
+  </div>
+
+  <div style="height:80px"></div>
+</div>
+
+<!-- ═══════════════ MINUMAN PAGE ═══════════════ -->
+<div class="page" id="pg-minuman">
+  <div class="inner">
+    <button class="back-btn" onclick="gotoPage('home')">← Kembali</button>
+
+    <div class="sub-tabs">
+      <button class="stab on" onclick="filterDrink(this,'all')">✨ Semua</button>
+      <button class="stab" onclick="filterDrink(this,'coffee')">☕ Coffee</button>
+      <button class="stab" onclick="filterDrink(this,'espresso')">🔥 Espresso</button>
+      <button class="stab" onclick="filterDrink(this,'noncoffee')">🥤 Non Coffee</button>
+      <button class="stab" onclick="filterDrink(this,'jus')">🍊 Jus</button>
+      <button class="stab" onclick="filterDrink(this,'mocktail')">🍹 Mocktail</button>
+      <button class="stab" onclick="filterDrink(this,'dumdun')">🧋 Dum-Dum</button>
+    </div>
+
+    <div class="mgrid" id="drink-grid"></div>
+    <button class="add-btn" onclick="openAddMenu('minuman')">✚ Tambah Menu Minuman</button>
+
+    <!-- SYOK TAMBAHAN MINUMAN -->
+    <div class="stok-sec">
+      <div class="stok-hd">
+        <div class="sec-dot"></div>
+        <h3>Stok Tambahan Minuman</h3>
+        <button class="add-btn" style="margin:0 0 0 auto;padding:5px 12px;font-size:11px;border-radius:999px;width:auto;border-width:1.5px" onclick="openAddStok('minuman')">✚</button>
+      </div>
+      <div class="stok-grid" id="stok-minuman"></div>
+    </div>
+  </div>
+  <div style="height:80px"></div>
+</div>
+
+<!-- ═══════════════ MAKANAN PAGE ═══════════════ -->
+<div class="page" id="pg-makanan">
+  <div class="inner">
+    <button class="back-btn" onclick="gotoPage('home')">← Kembali</button>
+
+    <div class="sub-tabs">
+      <button class="stab on" onclick="filterFood(this,'all')">✨ Semua</button>
+      <button class="stab" onclick="filterFood(this,'beef')">🥩 Beef</button>
+      <button class="stab" onclick="filterFood(this,'ricebowl')">🍱 Rice Bowl</button>
+      <button class="stab" onclick="filterFood(this,'nasigoreng')">🍳 Nasi Goreng</button>
+      <button class="stab" onclick="filterFood(this,'nasibakar')">🔥 Nasi Bakar</button>
+      <button class="stab" onclick="filterFood(this,'mie')">🍜 Mie</button>
+      <button class="stab" onclick="filterFood(this,'steak')">🍗 Steak</button>
+      <button class="stab" onclick="filterFood(this,'burger')">🍔 Burger</button>
+    </div>
+
+    <div class="mgrid" id="food-grid"></div>
+    <button class="add-btn" onclick="openAddMenu('makanan')">✚ Tambah Menu Makanan</button>
+
+    <!-- SYOK TAMBAHAN MAKANAN -->
+    <div class="stok-sec">
+      <div class="stok-hd">
+        <div class="sec-dot"></div>
+        <h3>Stok Tambahan Makanan</h3>
+        <button class="add-btn" style="margin:0 0 0 auto;padding:5px 12px;font-size:11px;border-radius:999px;width:auto;border-width:1.5px" onclick="openAddStok('makanan')">✚</button>
+      </div>
+      <div class="stok-grid" id="stok-makanan"></div>
+    </div>
+  </div>
+  <div style="height:80px"></div>
+</div>
+
+<!-- ═══════════════ PAKET PAGE ═══════════════ -->
+<div class="page" id="pg-paket">
+  <div class="inner">
+    <button class="back-btn" onclick="gotoPage('home')">← Kembali</button>
+    <div class="slabel">🎁 Paket Spesial</div>
+    <div id="paket-list"></div>
+    <button class="add-btn" onclick="openAddMenu('paket')">✚ Tambah Paket</button>
+
+    <!-- SYOK TAMBAHAN PAKET -->
+    <div class="stok-sec">
+      <div class="stok-hd">
+        <div class="sec-dot"></div>
+        <h3>Stok Tambahan Paket</h3>
+        <button class="add-btn" style="margin:0 0 0 auto;padding:5px 12px;font-size:11px;border-radius:999px;width:auto;border-width:1.5px" onclick="openAddStok('paket')">✚</button>
+      </div>
+      <div class="stok-grid" id="stok-paket"></div>
+    </div>
+  </div>
+  <div style="height:80px"></div>
+</div>
+
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="admin-bar">
+  <div class="admin-info">
+    <div class="admin-dot"></div>
+    <span class="admin-lbl">Admin</span>
+    <span class="admin-badge">🔑 Aktif</span>
+  </div>
+  <div style="display:flex;gap:7px;align-items:center">
+    <button class="btn-export" onclick="exportData()" title="Export semua data menu ke file JSON">⬇️ Export</button>
+    <button class="btn-import-lbl" onclick="document.getElementById('import-file').click()" title="Import data menu dari file JSON">⬆️ Import</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
+    <button class="btn-logout" onclick="logoutAdmin()">Keluar</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL -->
+<div class="moverlay" id="moverlay" onclick="handleOverlayClick(event)">
+  <div class="mbox" id="mbox"></div>
+</div>
+
+
+<!-- TAP DOTS -->
+<div class="tap-indicator" id="tap-ind"><div class="tap-dot" id="td1"></div><div class="tap-dot" id="td2"></div><div class="tap-dot" id="td3"></div></div>
+</div><!-- #app -->
+
+<script>
+// ─── LOGO (base64 embedded) ───
+const LOGO_SRC = 'data:image/png;base64,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';
+document.getElementById('logo-img').src = LOGO_SRC;
+document.getElementById('hero-logo').src = LOGO_SRC;
+
+// ─── BUBBLES ───
+(function(){
+  const c = document.getElementById('bubbles');
+  for(let i=0;i<20;i++){
+    const b = document.createElement('div');
+    b.className='bbl';
+    const s=Math.random()*55+8;
+    b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*22+14}s;animation-delay:${Math.random()*18}s`;
+    c.appendChild(b);
+  }
+})();
+
+// ─── DB ───
+const KEY='diks_v3';
+let DB = (()=>{
+  try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}
+  return seed();
+})();
+let isAdmin=false;
+let drinkFilter='all';
+let foodFilter='all';
+
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+function rp(n){return 'Rp '+Number(n).toLocaleString('id-ID')}
+function uid(){return Date.now()+''+Math.random().toString(36).slice(2,6)}
+
+function seed(){
+  return{
+    minuman:[
+      // ── ESPRESSO ──
+      {id:uid(),cat:'espresso',name:'Espresso',desc:'Pure espresso shot klasik',price:30000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Espresso Bon-Bon',desc:'Espresso + susu kental manis, unik & manis',price:40000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Americano',desc:'Hot Rp35k / Iced Rp40k',price:35000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Caffe Mocca',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Milk Coffee',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Milk Coffee 3 Warna',desc:'Hot Rp45k / Iced Rp50k, cantik berlapis',price:45000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Coffee Pandan Ice',desc:'Kopi pandan segar khas Dik\'s',price:50000,emoji:'🌿',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Coffee Milk Thailand Ice',desc:'Thai style coffee milk yang creamy',price:50000,emoji:'🧡',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Cappucino',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Caffe Latte',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Dalgona Coffee',desc:'Whipped coffee foam yang viral',price:50000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Vanilla Latte',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'🍦',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Caramel Latte',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'🍮',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Banana Latte',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'🍌',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Hazelnut Latte',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'🌰',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Janji Jiwa Coffee',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Coffee Soda Ice',desc:'Kopi soda segar',price:50000,emoji:'🫧',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Coffee Lemon Ice',desc:'Kopi lemon yang menyegarkan',price:50000,emoji:'🍋',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Vietnam Drip',desc:'Hot Rp45k / Iced Rp50k, tetes demi tetes',price:45000,emoji:'🇻🇳',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Kopi Tubruk',desc:'Kopi tradisional khas nusantara',price:35000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'V60',desc:'Manual brew pour-over premium',price:55000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Aeropress',desc:'Metode seduh tekanan udara',price:55000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'espresso',name:'Japan Ice Coffee V60',desc:'Cold brew V60 gaya Jepang',price:80000,emoji:'🇯🇵',img:'',badge:''},
+      // ── NEW MENU COFFEE ──
+      {id:uid(),cat:'coffee',name:'Coffee Mocktail',desc:'Perpaduan kopi & mocktail segar',price:45000,emoji:'🍹',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Peach Americano',desc:'Americano segar dengan persik',price:45000,emoji:'🍑',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Orange Americano',desc:'Americano dengan twist jeruk',price:45000,emoji:'🍊',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Coffee Mint Latte',desc:'Kopi latte dengan sentuhan mint',price:45000,emoji:'🌿',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Mocca Mint Iced',desc:'Mocha dingin dengan mint segar',price:45000,emoji:'🍫',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Caramel Mocha Iced',desc:'Karamel + mocha yang kaya rasa',price:50000,emoji:'🍮',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Coconut Mocha Machiato',desc:'Mocha + kelapa + machiato layer',price:50000,emoji:'🥥',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Caramel Machiato',desc:'Espresso berlapis karamel & susu',price:50000,emoji:'🍮',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Creamy Vanilla Machiato',desc:'Vanilla cream machiato lembut',price:50000,emoji:'🍦',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Butter Saesalt Coffee',desc:'Kopi butter sea salt yang unik',price:50000,emoji:'🧈',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Macha Coffee',desc:'Perpaduan matcha & kopi',price:50000,emoji:'🍵',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Pandan Dalgona Coffee',desc:'Dalgona kopi aroma pandan',price:50000,emoji:'🌿',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Oreo Milo Lava Latte',desc:'Latte lava Oreo Milo berlapis',price:50000,emoji:'🍪',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Milo Cream Cheese Shake',desc:'Milo shake dengan cream cheese',price:50000,emoji:'🥛',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Banana Tiramisu Espresso',desc:'Espresso tiramisu banana',price:50000,emoji:'🍌',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'BlackForest Mocca Frappe',desc:'Frappe blackforest mocha',price:55000,emoji:'🍒',img:'',badge:'NEW'},
+      {id:uid(),cat:'coffee',name:'Affogato',desc:'Es krim Vanilla + Espresso panas',price:55000,emoji:'🍨',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Queen Presso',desc:'Silverqueen + Espresso, indulgent!',price:55000,emoji:'👑',img:'',badge:'HOT'},
+      {id:uid(),cat:'coffee',name:'Magnum Coffee',desc:'Kopi ala Magnum premium',price:55000,emoji:'🍦',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Caramello Ice',desc:'Karamel kopi es yang memanjakan',price:50000,emoji:'🍮',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Chocomel Ice',desc:'Cokelat + karamel dingin',price:50000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Almond Coffee Ice',desc:'Kopi es dengan almond',price:50000,emoji:'🌰',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Butterscotch Coffee Ice',desc:'Kopi butterscotch manis legit',price:50000,emoji:'🧈',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Klepon Coffee Ice',desc:'Inspirasi klepon dalam kopi',price:50000,emoji:'💚',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Popcorn Coffee Ice',desc:'Kopi es rasa popcorn caramel',price:50000,emoji:'🍿',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Macadamia Nut Coffee Ice',desc:'Kopi macadamia yang creamy',price:55000,emoji:'🌰',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Bailey\'s Coffee Ice',desc:'Kopi es inspired Bailey\'s',price:55000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Avocado Coffee Ice',desc:'Alpukat + kopi yang harmonis',price:50000,emoji:'🥑',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Marie Regal Milk Coffee Ice',desc:'Kopi susu es biskuit Marie',price:50000,emoji:'🍪',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Ice Coco Milk Coffee',desc:'Kopi susu kelapa yang segar',price:50000,emoji:'🥥',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Long Black Coffee Ice',desc:'Long black dingin pekat',price:50000,emoji:'🖤',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Velved Choco Ice',desc:'Red velvet coklat dingin',price:50000,emoji:'❤️',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Strawberry Latte Ice',desc:'Latte stroberi segar & pink',price:50000,emoji:'🍓',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Rose Coffee Ice',desc:'Kopi es dengan aroma mawar',price:50000,emoji:'🌹',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Green Presso Ice',desc:'Matcha espresso iced',price:50000,emoji:'🍵',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Ice Chocolate Frappe',desc:'Frappe cokelat dingin creamy',price:55000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Tiramisu Fusion',desc:'Tiramisu latte fusion premium',price:55000,emoji:'🎂',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Coffee Oreo',desc:'Kopi dengan remahan Oreo',price:50000,emoji:'🍪',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Milo Coffee',desc:'Perpaduan Milo & kopi',price:45000,emoji:'🥛',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Coco Pandan Coffee',desc:'Kopi kelapa pandan harum',price:50000,emoji:'🌿',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Ice Green Tea Coffee',desc:'Matcha + kopi dalam satu gelas',price:50000,emoji:'🍵',img:'',badge:''},
+      {id:uid(),cat:'coffee',name:'Ice Green Tea Choco',desc:'Matcha + cokelat dingin',price:50000,emoji:'🍵',img:'',badge:''},
+      // ── NON COFFEE ──
+      {id:uid(),cat:'noncoffee',name:'Chocolate',desc:'Hot Rp40k / Iced Rp45k, Belgian cocoa',price:40000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Avocado Latte',desc:'Hot Rp45k / Iced Rp50k, alpukat creamy',price:45000,emoji:'🥑',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Red Velved',desc:'Hot Rp45k / Iced Rp50k',price:45000,emoji:'❤️',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Taro',desc:'Hot Rp45k / Iced Rp50k, ungu manis',price:45000,emoji:'💜',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Cookies N Cream',desc:'Cookies & cream yang creamy',price:50000,emoji:'🍪',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Milo Dino',desc:'Milo es gunung legend',price:45000,emoji:'🦕',img:'',badge:'HOT'},
+      {id:uid(),cat:'noncoffee',name:'Pink/Green/Lemon Romantic Ice',desc:'Minuman romantis berwarna-warni',price:45000,emoji:'🌈',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Bailey\'s Strawberry Cream Ice',desc:'Stroberi cream yang mewah',price:55000,emoji:'🍓',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Cheese Cake Berry Ice',desc:'Cheese cake berry dalam gelas',price:55000,emoji:'🫐',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Caramel White Chocolate Ice',desc:'White choco karamel premium',price:55000,emoji:'🍮',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Raspberry White Chocolate Ice',desc:'Raspberry + white chocolate',price:55000,emoji:'🍇',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Raspberry Mocca Ice',desc:'Mocha raspberry dingin',price:50000,emoji:'🍇',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Pandan Ice Latte',desc:'Pandan latte segar harum',price:50000,emoji:'🌿',img:'',badge:''},
+      // ── TEA ──
+      {id:uid(),cat:'noncoffee',name:'Green Tea',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🍵',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Thai Tea',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🧡',img:'',badge:'HOT'},
+      {id:uid(),cat:'noncoffee',name:'Green Tea Matcha Frappe',desc:'Frappe matcha yang creamy',price:45000,emoji:'🍵',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Lychee Tea/Milk',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🍈',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Lemon Tea',desc:'Hot Rp40k / Iced Rp45k, segar',price:40000,emoji:'🍋',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Milk Tea',desc:'Teh susu hangat lembut',price:35000,emoji:'🧋',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Black Tea',desc:'Teh hitam klasik murni',price:30000,emoji:'🫖',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Lemon Green Tea Iced',desc:'Green tea lemon segar dingin',price:45000,emoji:'🍋',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Lyche Lemon Tea Iced',desc:'Lychee + lemon tea dingin',price:45000,emoji:'🍈',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Lavender Lyche Iced',desc:'Lavender + lychee elegan',price:45000,emoji:'💜',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Lavender Lemon Iced',desc:'Lavender + lemon yang unik',price:45000,emoji:'💜',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Lechy Lemon Tea',desc:'Lychee lemon tea segar',price:45000,emoji:'🍈',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Lyche Berry Espresso',desc:'Espresso lychee berry fusion',price:50000,emoji:'🫐',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Orange Black Tea Soda',desc:'Teh hitam jeruk bersoda',price:45000,emoji:'🍊',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Mango Berry Tea Soda',desc:'Mangga berry soda tea',price:45000,emoji:'🥭',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Mango Thai Milk Tea Cream',desc:'Thai milk tea mangga dengan cream',price:50000,emoji:'🥭',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Hibiscus Pinacolada Lime Squash',desc:'Hibiscus pina colada lime',price:50000,emoji:'🌺',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Sunrise Lime Squash',desc:'Lime squash warna sunrise',price:45000,emoji:'🌅',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Passion Peach Ice',desc:'Passion fruit + peach dingin',price:45000,emoji:'🍑',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Tropical Punch',desc:'Punch tropis campuran buah',price:45000,emoji:'🌴',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Peach Tea Ice',desc:'Teh persik es yang segar',price:45000,emoji:'🍑',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Avocado Milo Ice',desc:'Alpukat + Milo dingin',price:50000,emoji:'🥑',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Banana Milo Smoothie',desc:'Smoothie pisang milo',price:45000,emoji:'🍌',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Berry Iced Tea',desc:'Teh berry dingin segar',price:45000,emoji:'🫐',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'RaspBerry Lime Squash',desc:'Raspberry lime squash segar',price:45000,emoji:'🍇',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Red Velved Oreo',desc:'Red velvet dengan Oreo crumble',price:50000,emoji:'❤️',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Manggo Shaken Yakult',desc:'Mangga kocok + Yakult segar',price:40000,emoji:'🥭',img:'',badge:'NEW'},
+      {id:uid(),cat:'noncoffee',name:'Orange Shaken Yakult',desc:'Jeruk kocok + Yakult',price:40000,emoji:'🍊',img:'',badge:'NEW'},
+      // ── MILKY & MILKSHAKE ──
+      {id:uid(),cat:'noncoffee',name:'Milky Vanilla',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🍦',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Milky Caramel',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🍮',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Milky Hazelnut',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🌰',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Milky Banana',desc:'Hot Rp40k / Iced Rp45k',price:40000,emoji:'🍌',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Avocado Milkshake',desc:'Milkshake alpukat creamy',price:50000,emoji:'🥑',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Red Velved Milkshake',desc:'Milkshake red velvet',price:50000,emoji:'❤️',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Taro Milkshake',desc:'Milkshake taro ungu manis',price:50000,emoji:'💜',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Chocolate Milkshake',desc:'Milkshake cokelat klasik',price:50000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Manggo Milkshake',desc:'Milkshake mangga tropis',price:50000,emoji:'🥭',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Bubble Gum Milkshake',desc:'Milkshake bubble gum pink',price:50000,emoji:'🫧',img:'',badge:''},
+      {id:uid(),cat:'noncoffee',name:'Tiramisu Milkshake',desc:'Milkshake tiramisu premium',price:50000,emoji:'🎂',img:'',badge:''},
+      // ── MOCKTAIL & JUS ──
+      {id:uid(),cat:'mocktail',name:'Blue Ocean',desc:'Lime squash + blue syrup segar',price:35000,emoji:'🌊',img:'',badge:'HOT'},
+      {id:uid(),cat:'mocktail',name:'Shirley Squash',desc:'Mocktail shirley yang menyegarkan',price:35000,emoji:'🍹',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Mojito',desc:'Mint lime soda klasik',price:35000,emoji:'🌿',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Rainbow',desc:'Mocktail warna pelangi berlapis',price:35000,emoji:'🌈',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Blueberry Squash',desc:'Blueberry squash segar',price:35000,emoji:'🫐',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Blue Curacao',desc:'Blue curacao mocktail tropis',price:35000,emoji:'💙',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Grenadine',desc:'Mocktail grenadine merah segar',price:35000,emoji:'🍒',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Jamaica Rum',desc:'Mocktail inspired Jamaica rum',price:35000,emoji:'🍹',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Mixed Berry',desc:'Campuran berry segar',price:35000,emoji:'🫐',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Hibiscus',desc:'Mocktail hibiscus merah cantik',price:35000,emoji:'🌺',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Triple Sec',desc:'Triple sec mocktail citrus',price:35000,emoji:'🍊',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Ice Cream Float',desc:'Es krim mengambang di soda',price:50000,emoji:'🍦',img:'',badge:''},
+      {id:uid(),cat:'mocktail',name:'Happy Soda (Soda Gembira)',desc:'Soda gembira penuh warna',price:35000,emoji:'🎉',img:'',badge:''},
+      {id:uid(),cat:'jus',name:'Jus Jeruk',desc:'Jeruk segar diperas langsung',price:35000,emoji:'🍊',img:'',badge:''},
+      {id:uid(),cat:'jus',name:'Jus Alpukat',desc:'Alpukat creamy + susu',price:35000,emoji:'🥑',img:'',badge:''},
+      {id:uid(),cat:'jus',name:'Jus Buah Naga',desc:'Buah naga segar berwarna',price:35000,emoji:'🐉',img:'',badge:''},
+      // ── DUM-DUM ──
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Green Tea',desc:'Green tea signature Dik\'s',price:35000,emoji:'🍵',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Thai Tea',desc:'Thai tea dalam format dum-dum',price:35000,emoji:'🧡',img:'',badge:'HOT'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Cappucino',desc:'Cappucino dum-dum khas Dik\'s',price:35000,emoji:'☕',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Mochacino',desc:'Mochacino dum-dum pekat',price:35000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Chocolatte',desc:'Cokelat latte dum-dum manis',price:35000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Millo',desc:'Milo dum-dum favori anak-anak',price:35000,emoji:'🥛',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Red Velved',desc:'Red velvet dum-dum merah cantik',price:35000,emoji:'❤️',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Avocado',desc:'Alpukat dum-dum creamy',price:35000,emoji:'🥑',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Taro',desc:'Taro ungu dum-dum manis',price:35000,emoji:'💜',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Manggo',desc:'Mangga tropis dum-dum segar',price:35000,emoji:'🥭',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Buble Gum',desc:'Bubble gum pink dum-dum unik',price:35000,emoji:'🫧',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Tiramisu',desc:'Tiramisu dum-dum premium',price:35000,emoji:'🎂',img:'',badge:''},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Strawberry',desc:'Stroberi dum-dum merah segar',price:35000,emoji:'🍓',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Dark Choco Biscoff',desc:'Dark choco biscoff dum-dum',price:35000,emoji:'🍪',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Chocolate Mint',desc:'Choco mint dum-dum segar',price:35000,emoji:'🌿',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Lychee Tea',desc:'Lychee tea dum-dum harum',price:35000,emoji:'🍈',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Pineapple',desc:'Nanas segar dum-dum tropis',price:35000,emoji:'🍍',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Pandan Coffee',desc:'Kopi pandan dum-dum khas',price:35000,emoji:'🌿',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Coconut Milk Coffee',desc:'Kopi susu kelapa dum-dum',price:35000,emoji:'🥥',img:'',badge:'NEW'},
+      {id:uid(),cat:'dumdun',name:'Dum-Dum Cookies Cream Oreo',desc:'Oreo cookies cream dum-dum',price:35000,emoji:'🍪',img:'',badge:'NEW'},
+    ],
+    makanan:[
+      // ── BEEF ──
+      {id:uid(),cat:'beef',name:'Beef Teriyaki',desc:'Beef slice saus teriyaki gurih manis',price:98000,emoji:'🥩',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Beef Lada Hitam',desc:'Beef dengan saus lada hitam pedas',price:98000,emoji:'🌶️',img:'',badge:'HOT'},
+      {id:uid(),cat:'beef',name:'Sup Iga',desc:'Sup iga sapi hangat berkuah bening',price:98000,emoji:'🍲',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Sup Buntut',desc:'Sup buntut sapi kaya kolagen',price:98000,emoji:'🍲',img:'',badge:'HOT'},
+      {id:uid(),cat:'beef',name:'Buntut Bakar',desc:'Buntut sapi dibakar sempurna',price:98000,emoji:'🔥',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Iga Bakar',desc:'Iga sapi dibakar dengan bumbu special',price:98000,emoji:'🔥',img:'',badge:'HOT'},
+      // ── CHICKEN ──
+      {id:uid(),cat:'beef',name:'Ayam Saus Lada Hitam',desc:'Ayam dengan saus lada hitam pedas',price:77000,emoji:'🍗',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Ayam Saus Padang',desc:'Ayam bumbu Padang pedas kuat',price:77000,emoji:'🌶️',img:'',badge:'HOT'},
+      {id:uid(),cat:'beef',name:'Ayam Saus Asam Manis',desc:'Ayam saus asam manis ala Chinese',price:77000,emoji:'🍗',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Ayam Goreng Mentega',desc:'Ayam goreng butter harum lezat',price:77000,emoji:'🧈',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Ayam Geprek',desc:'Ayam geprek sambal pedas nampol',price:55000,emoji:'💥',img:'',badge:'HOT'},
+      {id:uid(),cat:'beef',name:'Ayam Rica-Rica',desc:'Ayam rica-rica pedas khas Manado',price:77000,emoji:'🌶️',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Chicken Popcorn',desc:'Ayam popcorn renyah crispy',price:55000,emoji:'🍿',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Sate Taican',desc:'Sate ayam bumbu taican spesial',price:55000,emoji:'🍢',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Soto Ayam',desc:'Soto ayam kuah bening hangat',price:50000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Bubur Ayam',desc:'Bubur ayam lengkap dengan topping',price:40000,emoji:'🥣',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Ayam Geprek Cheese',desc:'Ayam geprek + lelehan keju',price:60000,emoji:'🧀',img:'',badge:''},
+      {id:uid(),cat:'beef',name:'Ayam Saus Madu',desc:'Ayam glazed saus madu manis',price:77000,emoji:'🍯',img:'',badge:''},
+      // ── STEAK ──
+      {id:uid(),cat:'steak',name:'Chicken Crispy',desc:'Ayam crispy steak dengan saus pilihan',price:97000,emoji:'🍗',img:'',badge:''},
+      {id:uid(),cat:'steak',name:'Chicken Steak',desc:'Chicken steak panggang premium',price:100000,emoji:'🍗',img:'',badge:'HOT'},
+      {id:uid(),cat:'steak',name:'Fish \u0026 Chips',desc:'Ikan goreng crispy + kentang chips',price:97000,emoji:'🐟',img:'',badge:''},
+      // ── SPAGETI ──
+      {id:uid(),cat:'mie',name:'Spagetti Oglio-lio',desc:'Spaghetti aglio e olio original Italia',price:66000,emoji:'🍝',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Spagetti Carbonara',desc:'Spaghetti carbonara creamy klasik',price:73000,emoji:'🍝',img:'',badge:'HOT'},
+      {id:uid(),cat:'mie',name:'Spagetti Bologneis',desc:'Spaghetti bolognese daging cincang',price:73000,emoji:'🍝',img:'',badge:''},
+      // ── SEAFOOD ──
+      {id:uid(),cat:'ricebowl',name:'Cumi Saus Asam Manis',desc:'Cumi saus asam manis ala Chinese',price:83000,emoji:'🦑',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Cumi Saus Padang',desc:'Cumi bumbu Padang pedas nampol',price:83000,emoji:'🦑',img:'',badge:'HOT'},
+      {id:uid(),cat:'ricebowl',name:'Cumi Lada Hitam',desc:'Cumi lada hitam gurih pedas',price:88000,emoji:'🦑',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Cumi Rica-Rica',desc:'Cumi rica-rica pedas khas Manado',price:85000,emoji:'🦑',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Udang Saus Asam Manis',desc:'Udang saus asam manis lezat',price:83000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Udang Saus Padang',desc:'Udang bumbu Padang pedas',price:83000,emoji:'🦐',img:'',badge:'HOT'},
+      {id:uid(),cat:'ricebowl',name:'Udang Lada Hitam',desc:'Udang lada hitam gurih',price:88000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Udang Rica-Rica',desc:'Udang rica-rica khas Manado',price:85000,emoji:'🦐',img:'',badge:''},
+      // ── IKAN ──
+      {id:uid(),cat:'ricebowl',name:'Ikan Kuah Kuning',desc:'Ikan kuah kuning santan kunyit',price:72000,emoji:'🐟',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Ikan Kuah Bening',desc:'Ikan kuah bening jahe segar',price:72000,emoji:'🐟',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Ikan Saus Asam Manis',desc:'Ikan saus asam manis crispy',price:83000,emoji:'🐟',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Ikan Saus Padang',desc:'Ikan bumbu Padang kuat',price:83000,emoji:'🐟',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Ikan Rica-Rica',desc:'Ikan rica-rica pedas semerbak',price:83000,emoji:'🐟',img:'',badge:''},
+      // ── RICE BOWL ──
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ayam Saus Padang',desc:'Ayam saus Padang + nasi hangat',price:50000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ayam Saus Asam Manis',desc:'Ayam asam manis + nasi',price:50000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ayam Lada Hitam',desc:'Ayam lada hitam + nasi',price:50000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ayam Teriyaki',desc:'Ayam teriyaki + nasi hangat',price:50000,emoji:'🍱',img:'',badge:'HOT'},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Beef Saus Padang',desc:'Beef saus Padang + nasi',price:55000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Beef Saus Asam Manis',desc:'Beef asam manis + nasi',price:55000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Beef Lada Hitam',desc:'Beef lada hitam + nasi',price:55000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Beef Teriyaki',desc:'Beef teriyaki + nasi hangat',price:55000,emoji:'🍱',img:'',badge:'HOT'},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ikan Saus Padang',desc:'Ikan saus Padang + nasi',price:50000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ikan Asam Manis',desc:'Ikan asam manis + nasi',price:50000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ikan Lada Hitam',desc:'Ikan lada hitam + nasi',price:50000,emoji:'🍱',img:'',badge:''},
+      {id:uid(),cat:'ricebowl',name:'Rice Bowl Ikan Teriyaki',desc:'Ikan teriyaki + nasi hangat',price:50000,emoji:'🍱',img:'',badge:''},
+      // ── NASI GORENG ──
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Sambal Ijo',desc:'Nasi goreng sambal hijau pedas segar',price:50000,emoji:'🍳',img:'',badge:''},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng X.O',desc:'Nasi goreng saus X.O premium',price:50000,emoji:'🍳',img:'',badge:'HOT'},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Seafood',desc:'Nasi goreng udang + cumi + ikan',price:60000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Asar',desc:'Nasi goreng bumbu asar khas Papua',price:50000,emoji:'🍳',img:'',badge:''},
+      {id:uid(),cat:'nasigoreng',name:"Nasi Goreng Dik\'s",desc:"Nasi goreng spesial signature Dik\'s",price:50000,emoji:'⭐',img:'',badge:'HOT'},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Special',desc:'Nasi goreng spesial bumbu rempah',price:50000,emoji:'🍳',img:'',badge:''},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Biasa',desc:'Nasi goreng sederhana lezat',price:45000,emoji:'🍳',img:'',badge:''},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Kampung',desc:'Nasi goreng bumbu tradisional kampung',price:45000,emoji:'🌿',img:'',badge:''},
+      {id:uid(),cat:'nasigoreng',name:'Nasi Goreng Ikan Asin',desc:'Nasi goreng + ikan asin gurih',price:45000,emoji:'🐟',img:'',badge:''},
+      // ── LALAPAN ──
+      {id:uid(),cat:'nasibakar',name:'Ayam Goreng Kremes',desc:'Ayam goreng + kremes renyah + lalapan',price:60000,emoji:'🍗',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Ayam Goreng Serundeng',desc:'Ayam goreng + serundeng kelapa',price:60000,emoji:'🍗',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Nasi Lalapan Ayam Goreng',desc:'Nasi + ayam goreng + lalapan sambal',price:55000,emoji:'🍽️',img:'',badge:'HOT'},
+      {id:uid(),cat:'nasibakar',name:'Nasi Lalapan Ayam Bakar',desc:'Nasi + ayam bakar + lalapan sambal',price:60000,emoji:'🔥',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Ikan Mujair Goreng',desc:'Ikan mujair goreng crispy + lalapan',price:110000,emoji:'🐟',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Ikan Mujair Bakar',desc:'Ikan mujair bakar bumbu + lalapan',price:110000,emoji:'🔥',img:'',badge:''},
+      // ── NASI BAKAR ──
+      {id:uid(),cat:'nasibakar',name:'Nasi Bakar Ayam Woku',desc:'Nasi bakar ayam bumbu woku khas Manado',price:70000,emoji:'🔥',img:'',badge:'HOT'},
+      {id:uid(),cat:'nasibakar',name:'Nasi Bakar Cumi Rica',desc:'Nasi bakar cumi rica-rica pedas',price:70000,emoji:'🦑',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Nasi Bakar Cakalang',desc:'Nasi bakar ikan cakalang fufu',price:70000,emoji:'🐟',img:'',badge:''},
+      // ── MIE ──
+      {id:uid(),cat:'mie',name:'Mie Goreng',desc:'Mie goreng bumbu klasik lezat',price:45000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Mie Goreng Special',desc:'Mie goreng special topping lengkap',price:50000,emoji:'🍜',img:'',badge:'HOT'},
+      {id:uid(),cat:'mie',name:'Mie Udang',desc:'Mie goreng dengan udang segar',price:55000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Mie Goreng Seafood',desc:'Mie goreng udang + cumi + ikan',price:60000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Indomie Banglades',desc:'Indomie bumbu Bangladesh spicy',price:50000,emoji:'🌶️',img:'',badge:'HOT'},
+      {id:uid(),cat:'mie',name:'Indomie Goreng Biasa',desc:'Indomie goreng original',price:35000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Indomie Goreng Special',desc:'Indomie goreng + topping spesial',price:40000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Indomie Goreng Seafood',desc:'Indomie goreng + seafood',price:55000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Indomie Kari Biasa',desc:'Indomie kuah kari original',price:35000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Indomie Kari Special',desc:'Indomie kari + topping spesial',price:40000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Bihun Goreng Biasa',desc:'Bihun goreng original lembut',price:45000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Bihun Goreng Special',desc:'Bihun goreng + topping lengkap',price:50000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Bihun Goreng Seafood',desc:'Bihun goreng campur seafood',price:60000,emoji:'🦐',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Mie Titi',desc:'Mie titi kering khas Makassar',price:50000,emoji:'🍜',img:'',badge:'HOT'},
+      {id:uid(),cat:'mie',name:'Kwetiau Biasa',desc:'Kwetiau goreng original',price:45000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Kwetiau Special',desc:'Kwetiau goreng topping lengkap',price:50000,emoji:'🍜',img:'',badge:''},
+      {id:uid(),cat:'mie',name:'Kwetiau Seafood',desc:'Kwetiau goreng campur seafood',price:60000,emoji:'🦐',img:'',badge:''},
+      // ── SAYURAN ──
+      {id:uid(),cat:'burger',name:'Capcay Kuah/Goreng',desc:'Capcay sayuran segar kuah atau goreng',price:55000,emoji:'🥦',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Kangkung Cah/Terasi/Bunga Pepaya',desc:'Tumis kangkung pilihan bumbu',price:45000,emoji:'🌿',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Sup Jagung',desc:'Sup jagung manis hangat',price:45000,emoji:'🌽',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Sapo Tahu',desc:'Sapo tahu claypot hangat',price:55000,emoji:'🥘',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Tumis Pare Tempe',desc:'Tumis pare tempe pahit lezat',price:45000,emoji:'🌿',img:'',badge:''},
+      // ── BURGER ──
+      {id:uid(),cat:'burger',name:'Cheese Burger Beef',desc:'Burger beef + keju meleleh',price:50000,emoji:'🍔',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Cheese Burger Chicken',desc:'Burger ayam + keju meleleh',price:44000,emoji:'🍔',img:'',badge:''},
+      // ── SNACK ──
+      {id:uid(),cat:'burger',name:'Kentang Goreng',desc:'Kentang goreng crispy renyah',price:35000,emoji:'🍟',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Pisang Susu Keju',desc:'Pisang goreng + susu + keju',price:40000,emoji:'🍌',img:'',badge:'HOT'},
+      {id:uid(),cat:'burger',name:'Pisang Susu Keju Coklat',desc:'Pisang goreng + susu keju + coklat',price:40000,emoji:'🍫',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Pisang Lumpur',desc:'Pisang lumpur khas & unik',price:40000,emoji:'🍌',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Pisang Goreng Ori',desc:'Pisang goreng original crispy',price:35000,emoji:'🍌',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Stick Pisang',desc:'Stick pisang renyah manis',price:35000,emoji:'🍌',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Stick Keladi',desc:'Stick keladi gurih renyah',price:35000,emoji:'🟤',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Dimsum',desc:'Dimsum kukus lembut isi ayam',price:50000,emoji:'🥟',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Dimsum Mentai',desc:'Dimsum + saus mentai premium',price:55000,emoji:'🥟',img:'',badge:'HOT'},
+      {id:uid(),cat:'burger',name:'Keladi Goreng',desc:'Keladi goreng gurih renyah',price:40000,emoji:'🟤',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Singkong Goreng Ori',desc:'Singkong goreng original',price:35000,emoji:'🍠',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Singkong Keju Susu',desc:'Singkong + keju + susu manis',price:40000,emoji:'🧀',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Sostel (Sosis Telur)',desc:'Sosis + telur digoreng lezat',price:35000,emoji:'🌭',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Roti Bakar',desc:'Manis / Telur / Special - Rp35k',price:35000,emoji:'🍞',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Snack Bucket',desc:'Bucket snack campur seru',price:40000,emoji:'🪣',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Tempe Mendoan',desc:'Tempe mendoan setengah matang gurih',price:35000,emoji:'🫘',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Siomay',desc:'Siomay kukus bumbu kacang',price:35000,emoji:'🥟',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Batagor',desc:'Batagor goreng bumbu kacang',price:45000,emoji:'🥟',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Singkong Thailand',desc:'Singkong Thailand manis legit',price:40000,emoji:'🍠',img:'',badge:''},
+      {id:uid(),cat:'burger',name:'Tahu Cabe Garam',desc:'Tahu goreng cabe garam krispy',price:45000,emoji:'🫒',img:'',badge:'HOT'},
+      {id:uid(),cat:'burger',name:'Bitterballen',desc:'Bitterballen isi daging crispy',price:55000,emoji:'🔵',img:'',badge:''},
+      // ── TELUR ──
+      {id:uid(),cat:'ricebowl',name:'Fuyunghai',desc:'Fuyunghai telur saus asam manis',price:55000,emoji:'🥚',img:'',badge:''},
+      // ── SAMBAL ──
+      {id:uid(),cat:'nasibakar',name:'Sambal Penyet',desc:'Sambal penyet pedas terasi',price:10000,emoji:'🌶️',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Matah',desc:'Sambal matah segar khas Bali',price:10000,emoji:'🌿',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Dabu-Dabu',desc:'Sambal dabu-dabu khas Manado',price:10000,emoji:'🍅',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Terasi Goreng',desc:'Sambal terasi goreng kuat',price:10000,emoji:'🌶️',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Terasi Mentah',desc:'Sambal terasi mentah segar',price:10000,emoji:'🌶️',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Ijo',desc:'Sambal hijau segar pedas',price:10000,emoji:'💚',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Jahe',desc:'Sambal jahe hangat unik',price:10000,emoji:'🫚',img:'',badge:''},
+      {id:uid(),cat:'nasibakar',name:'Sambal Kecap',desc:'Sambal kecap manis gurih',price:10000,emoji:'🫙',img:'',badge:''},
+    ],
+    paket:[
+      {id:uid(),name:'Snack Kotak A',desc:'Kue + Air Mineral Gelas — min 50 orang',price:35000,save:'35k/kotak',emoji:'📦',img:''},
+      {id:uid(),name:'Snack Kotak B',desc:'Kue + Teh Kotak — min 50 orang',price:40000,save:'40k/kotak',emoji:'📦',img:''},
+      {id:uid(),name:'All Gedung + Musik + V-Trone',desc:'Paket lengkap semua fasilitas gedung',price:15000000,save:'By Request',emoji:'🏛️',img:''},
+      {id:uid(),name:'Gedung L1 + Musik + V-Trone',desc:'Fasilitas gedung lantai 1 lengkap',price:10000000,save:'By Request',emoji:'🏢',img:''},
+      {id:uid(),name:'VIP Room',desc:'Ruang VIP eksklusif per kegiatan',price:500000,save:'Per Kegiatan',emoji:'👑',img:''},
+      {id:uid(),name:'Meeting Room + Infokus',desc:'Ruang meeting + proyektor infokus',price:1000000,save:'Per Kegiatan',emoji:'💼',img:''},
+      {id:uid(),name:'Paket Kotak 120k/Orang',desc:'Daging, Urap/Kangkung/Sayur Nangka, Tahu, Sambal, Air Mineral, Buah, Kerupuk, Nasi — min 50 orang',price:120000,save:'120k/orang',emoji:'🍱',img:''},
+      {id:uid(),name:'Paket Kotak 95k/Orang',desc:'Ayam, Urap/Kangkung/Sayur Nangka, Perkedel, Sambal, Kerupuk, Air Mineral, Buah, Nasi — min 50 orang',price:95000,save:'95k/orang',emoji:'🍱',img:''},
+      {id:uid(),name:'Paket Kotak 85k/Orang',desc:'Ikan, Urap/Kangkung/Sayur Nangka, Oseng Tempe, Kerupuk, Air Mineral, Sambal, Buah, Nasi — min 50 orang',price:85000,save:'85k/orang',emoji:'🍱',img:''},
+      {id:uid(),name:'Prasmanan Paket A — 150k/Orang',desc:'Daging Semur/Lapis/Lada Hitam, Telur Balado, Capcay, Acar, Kerupuk, Air Mineral, Sambal, Buah, Nasi',price:150000,save:'150k/orang',emoji:'🍽️',img:''},
+      {id:uid(),name:'Prasmanan Paket B — 130k/Orang',desc:'Ayam Goreng Mentega, Ikan Asam Manis, Sup, Sambal, Kerupuk, Air Mineral, Acar, Buah, Nasi',price:130000,save:'130k/orang',emoji:'🍽️',img:''},
+      {id:uid(),name:'Prasmanan Paket C — 100k/Orang',desc:'Ikan Saos Padang, Perkedel Jagung, Urap, Mie Goreng, Kerupuk, Air Mineral, Sambal, Buah, Nasi',price:100000,save:'100k/orang',emoji:'🍽️',img:''},
+      {id:uid(),name:'Paket Meet & Family — 1.5Jt/10 Orang',desc:'Nasi 1 Bakul, Udang+Cumi+Ayam+Beef+Sup Iga, Capcay, Mendoan, Tahu Cabe Garam, Snack Bucket 2, Kentang 2, Minuman 10cup, Ikan Kuah Bening',price:1500000,save:'Hemat Banyak!',emoji:'👨‍👩‍👧‍👦',img:'',badge:'HOT'},
+    ],
+    stok:{
+      minuman:[
+        {id:uid(),name:'Extra Shot Espresso',price:5000},
+        {id:uid(),name:'Susu Oat (Oatmilk)',price:8000},
+        {id:uid(),name:'Whipped Cream',price:5000},
+        {id:uid(),name:'Hazelnut Syrup',price:5000},
+        {id:uid(),name:'Caramel Drizzle',price:4000},
+        {id:uid(),name:'Es Batu Extra',price:2000},
+      ],
+      makanan:[
+        {id:uid(),name:'Extra Nasi Putih',price:5000},
+        {id:uid(),name:'Extra Telur Mata Sapi',price:5000},
+        {id:uid(),name:'Tambah Kerupuk',price:3000},
+        {id:uid(),name:'Saus Extra (BBQ/Pedas)',price:3000},
+        {id:uid(),name:'Extra Sayuran',price:4000},
+        {id:uid(),name:'Tambah Keju',price:6000},
+      ],
+      paket:[
+        {id:uid(),name:'Upgrade Minuman',price:10000},
+        {id:uid(),name:'Tambah Dessert',price:15000},
+        {id:uid(),name:'Extra 1 Minuman',price:20000},
+        {id:uid(),name:'Upgrade Premium',price:25000},
+      ]
+    },
+    events:[],
+    adminPass:'diks2019'
+  };
+}
+
+// ─── PAGE SYSTEM ───
+function gotoPage(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+pg).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(pg==='minuman') renderDrinks(drinkFilter);
+  if(pg==='makanan') renderFoods(foodFilter);
+  if(pg==='paket') renderPaket();
+  if(pg==='home') renderEvents();
+}
+
+// ─── RENDER DRINKS ───
+function renderDrinks(filter){
+  drinkFilter=filter;
+  const items = filter==='all' ? DB.minuman : DB.minuman.filter(i=>i.cat===filter);
+  document.getElementById('drink-grid').innerHTML = items.length
+    ? items.map((it,i)=>menuCard(it,'minuman',i)).join('')
+    : '<div class="empty"><span class="ei">🥤</span><p>Belum ada menu di sini</p></div>';
+  renderStok('minuman');
+}
+function filterDrink(btn,cat){
+  document.querySelectorAll('#pg-minuman .stab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');renderDrinks(cat);
+}
+
+// ─── RENDER FOODS ───
+function renderFoods(filter){
+  foodFilter=filter;
+  const items = filter==='all' ? DB.makanan : DB.makanan.filter(i=>i.cat===filter);
+  document.getElementById('food-grid').innerHTML = items.length
+    ? items.map((it,i)=>menuCard(it,'makanan',i)).join('')
+    : '<div class="empty"><span class="ei">🍽️</span><p>Belum ada menu di sini</p></div>';
+  renderStok('makanan');
+}
+function filterFood(btn,cat){
+  document.querySelectorAll('#pg-makanan .stab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');renderFoods(cat);
+}
+
+// ─── RENDER PAKET ───
+function renderPaket(){
+  const list=document.getElementById('paket-list');
+  list.innerHTML = DB.paket.length
+    ? DB.paket.map((p,i)=>paketCard(p,i)).join('')
+    : '<div class="empty"><span class="ei">🎁</span><p>Belum ada paket tersedia</p></div>';
+  renderStok('paket');
+}
+
+// ─── RENDER SYOK ───
+function renderStok(type){
+  const c=document.getElementById('stok-'+type);
+  const items=DB.stok[type]||[];
+  if(!items.length){
+    c.innerHTML='<p style="grid-column:1/-1;text-align:center;font-size:12px;color:var(--text4);padding:14px">Belum ada stok tambahan</p>';
+    return;
+  }
+  c.innerHTML=items.map(s=>`
+    <div class="stok-item">
+      <span class="stok-name">${s.name}</span>
+      <div style="display:flex;align-items:center;gap:6px;z-index:1;position:relative">
+        <span class="stok-price">+${rp(s.price)}</span>
+        ${isAdmin?`<button onclick="delStok('${type}','${s.id}')" style="background:rgba(229,57,53,0.1);border:1px solid rgba(229,57,53,0.2);border-radius:50%;width:20px;height:20px;font-size:11px;color:#c0392b;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ─── RENDER EVENTS ───
+function renderEvents(){
+  const list=document.getElementById('evt-list');
+  const empty=document.getElementById('evt-empty');
+  if(!DB.events.length){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  list.innerHTML=DB.events.map((e,i)=>`
+    <div class="info-card" style="animation-delay:${i*0.4}s">
+      <div class="info-tag">${e.type}</div>
+      <h3>${e.title}</h3>
+      <p>${e.desc}</p>
+      <div class="info-meta">
+        <span>📅 ${e.date}</span>
+        ${isAdmin?`<button onclick="delEvent('${e.id}')" style="background:rgba(229,57,53,0.09);border:1px solid rgba(229,57,53,0.2);border-radius:999px;padding:4px 12px;font-size:11px;color:#c0392b;cursor:pointer;font-family:Nunito,sans-serif;font-weight:700">Hapus</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ─── CARD HTML ───
+function menuCard(item,type,idx){
+  const imgH = item.img
+    ? `<img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const emojiStyle = item.img ? 'style="display:none"' : '';
+  return `
+  <div class="mc" style="animation-delay:${idx*0.08}s">
+    <div class="mc-img">
+      ${item.badge?`<span class="mc-badge ${item.badge.toLowerCase()}">${item.badge==='NEW'?'🆕 Baru':'🔥 Hot'}</span>`:''}
+      ${imgH}
+      <div class="mc-emoji" ${emojiStyle}>${item.emoji||'🍽️'}</div>
+      <div class="mc-admin">
+        <button class="edt-btn edit" onclick="openEditMenu('${item.id}','${type}')">✏️</button>
+        <button class="edt-btn del" onclick="delMenu('${item.id}','${type}')">🗑</button>
+      </div>
+    </div>
+    <div class="mc-body">
+      <div class="mc-name">${item.name}</div>
+      <div class="mc-desc">${item.desc}</div>
+      <div class="mc-price">${rp(item.price)}</div>
+    </div>
+  </div>`;
+}
+
+function paketCard(p,idx){
+  const imgH = p.img ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:16px">` : '';
+  const emojiStyle = p.img ? 'style="display:none"' : '';
+  return `
+  <div class="pkcard" style="animation-delay:${idx*0.1}s">
+    <div class="pkimg">
+      ${imgH}
+      <span ${emojiStyle}>${p.emoji||'🎁'}</span>
+    </div>
+    <div class="pkinfo">
+      <div class="pkname">${p.name}</div>
+      <div class="pkdesc">${p.desc}</div>
+      <div class="pkprice">${rp(p.price)}<span class="pksave">${p.save||''}</span></div>
+    </div>
+    ${isAdmin?`<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
+      <button class="edt-btn edit" onclick="openEditMenu('${p.id}','paket')">✏️</button>
+      <button class="edt-btn del" onclick="delMenu('${p.id}','paket')">🗑</button>
+    </div>`:''}
+  </div>`;
+}
+
+// ─── MODAL ───
+function openMod(html){
+  document.getElementById('mbox').innerHTML='<div class="mbox-inner">'+html+'</div>';
+  document.getElementById('moverlay').classList.add('on');
+}
+function closeMod(){document.getElementById('moverlay').classList.remove('on')}
+function handleOverlayClick(e){if(e.target===document.getElementById('moverlay'))closeMod()}
+
+// ─── ADMIN LOGIN ───
+// TAP LOGO 3x to open admin
+let tapCount=0, tapTimer=null;
+function tapLogo(){
+  tapCount++;
+  const dots=[document.getElementById('td1'),document.getElementById('td2'),document.getElementById('td3')];
+  const ind=document.getElementById('tap-ind');
+  ind.classList.add('visible');
+  dots.forEach((d,i)=>d.classList.toggle('lit', i<tapCount));
+  clearTimeout(tapTimer);
+  if(tapCount>=3){
+    tapCount=0;dots.forEach(d=>d.classList.remove('lit'));
+    setTimeout(()=>ind.classList.remove('visible'),400);
+    openLogin();
+  } else {
+    tapTimer=setTimeout(()=>{
+      tapCount=0;dots.forEach(d=>d.classList.remove('lit'));
+      ind.classList.remove('visible');
+    },1800);
+  }
+}
+
+function openLogin(){
+  openMod(`
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:40px;margin-bottom:8px">🔑</div>
+      <h3 style="margin:0">Login Admin</h3>
+      <p style="font-size:12px;color:var(--text3);margin-top:4px">Masukkan password untuk mengelola menu</p>
+    </div>
+    <div class="fg">
+      <label>Password</label>
+      <div class="pw-wrap">
+        <input class="fc" type="password" id="apass" placeholder="Password admin..."
+          autocomplete="current-password"
+          style="font-size:16px;padding:14px 44px 14px 14px;letter-spacing:2px">
+        <button class="pw-eye" onclick="togglePw()" style="font-size:18px">👁</button>
+      </div>
+    </div>
+    <div class="mbtns" style="flex-direction:column;gap:8px">
+      <button class="btn-save" onclick="doLogin()" style="padding:15px;font-size:16px">Masuk →</button>
+      <button class="btn-cancel" onclick="closeMod()" style="padding:13px">Batal</button>
+    </div>
+  `);
+  setTimeout(()=>{const el=document.getElementById('apass');if(el)el.focus();},350);
+  setTimeout(()=>{const el=document.getElementById('apass');if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});},360);
+}
+function togglePw(){
+  const i=document.getElementById('apass');
+  i.type=i.type==='password'?'text':'password';
+}
+function doLogin(){
+  const v=document.getElementById('apass').value;
+  if(v===DB.adminPass){
+    isAdmin=true;document.body.classList.remove('guest');
+    document.getElementById('admin-bar').style.display='flex';
+    closeMod();toast('✅ Selamat datang, Admin!');
+    rerenderCurrent();
+  } else {
+    toast('❌ Password salah!');
+    document.getElementById('apass').style.borderColor='#e53935';
+    setTimeout(()=>document.getElementById('apass') && (document.getElementById('apass').style.borderColor=''),1500);
+  }
+}
+function logoutAdmin(){
+  isAdmin=false;document.body.classList.add('guest');
+  document.getElementById('admin-bar').style.display='none';
+  toast('👋 Keluar dari mode Admin');rerenderCurrent();
+}
+function rerenderCurrent(){
+  const active=document.querySelector('.page.active').id;
+  if(active==='pg-minuman')renderDrinks(drinkFilter);
+  else if(active==='pg-makanan')renderFoods(foodFilter);
+  else if(active==='pg-paket')renderPaket();
+  else renderEvents();
+}
+
+// ─── ADD MENU ───
+function openAddMenu(type){
+  if(!isAdmin){toast('🔒 Login admin dulu');return}
+  const isMinuman=type==='minuman';
+  const isMakanan=type==='makanan';
+  const isPaket=type==='paket';
+  const catOpts = isMinuman
+    ? '<option value="coffee">☕ Coffee</option><option value="espresso">🔥 Espresso</option><option value="noncoffee">🥤 Non Coffee</option><option value="jus">🍊 Jus</option><option value="mocktail">🍹 Mocktail</option><option value="dumdun">🧋 Dum-Dum</option>'
+    : isMakanan
+    ? '<option value="beef">🥩 Beef</option><option value="ricebowl">🍱 Rice Bowl</option><option value="nasigoreng">🍳 Nasi Goreng</option><option value="nasibakar">🔥 Nasi Bakar</option><option value="mie">🍜 Mie</option><option value="steak">🍗 Steak</option><option value="burger">🍔 Burger</option>'
+    : '';
+  const typeLabel = isPaket?'Paket':isMinuman?'Minuman':'Makanan';
+  openMod(`
+    <h3>✚ Tambah ${typeLabel}</h3>
+
+    <div class="fg">
+      <label>📷 Foto Menu</label>
+      <label class="img-drop" style="padding:22px">
+        <input type="file" accept="image/*,image/heic" onchange="previewImg(this,'prev-add')">
+        <div id="prev-add-wrap">
+          <div style="font-size:32px;display:flex;gap:8px;justify-content:center">📁 <span style="font-size:20px;align-self:center;color:var(--text3)">atau</span> 📷</div>
+          <p style="margin-top:8px;font-size:13px;font-weight:700;color:var(--text2)">Pilih dari File / Galeri / Kamera</p>
+          <p style="font-size:11px;color:var(--text3);margin-top:3px">JPG · PNG · HEIC · WEBP</p>
+        </div>
+        <img class="img-thumb" id="prev-add" style="display:none;width:100%;max-height:150px;object-fit:cover;border-radius:10px;margin-top:10px">
+      </label>
+    </div>
+
+    <div class="fg"><label>Nama Menu</label>
+      <input class="fc" id="f-name" placeholder="Nama menu..." style="font-size:16px;padding:14px"></div>
+    <div class="fg"><label>Deskripsi</label>
+      <input class="fc" id="f-desc" placeholder="Deskripsi singkat..." style="font-size:15px;padding:13px"></div>
+    <div class="fg"><label>💰 Harga (Rp)</label>
+      <input class="fc" type="number" id="f-price" placeholder="25000" min="0" inputmode="numeric" style="font-size:18px;font-weight:700;padding:14px;color:var(--accent)"></div>
+    ${!isPaket?`<div class="fg"><label>Kategori</label><select class="fc" id="f-cat" style="font-size:15px;padding:13px">${catOpts}</select></div>`:''}
+    ${isPaket?`<div class="fg"><label>Keterangan Hemat</label><input class="fc" id="f-save" placeholder="Hemat Rp 10.000" style="font-size:15px;padding:13px"></div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="fg"><label>Emoji</label>
+        <input class="fc" id="f-emoji" placeholder="☕" maxlength="4" style="font-size:20px;text-align:center;padding:12px"></div>
+      <div class="fg"><label>Badge</label>
+        <select class="fc" id="f-badge" style="font-size:14px;padding:13px">
+          <option value="">— Tidak ada</option>
+          <option value="NEW">🆕 Baru</option>
+          <option value="HOT">🔥 Hot</option>
+        </select></div>
+    </div>
+    <div class="mbtns" style="flex-direction:column;gap:8px;margin-top:20px">
+      <button class="btn-save" onclick="saveNewMenu('${type}')" style="padding:16px;font-size:16px">✅ Simpan Menu</button>
+      <button class="btn-cancel" onclick="closeMod()" style="padding:13px">Batal</button>
+    </div>
+  `);
+}
+function previewImg(input, prevId){
+  if(!input.files[0]) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById(prevId);
+    img.src=e.target.result;img.style.display='block';
+    input.dataset.b64=e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function saveNewMenu(type){
+  const name=document.getElementById('f-name').value.trim();
+  const desc=document.getElementById('f-desc').value.trim();
+  const price=parseInt(document.getElementById('f-price').value)||0;
+  const emoji=document.getElementById('f-emoji').value||'🍽️';
+  const badge=document.getElementById('f-badge').value;
+  if(!name||!price){toast('⚠️ Nama & harga wajib diisi!');return}
+  const imgInput=document.querySelector('#mbox input[type=file]');
+  const img=imgInput&&imgInput.dataset.b64?imgInput.dataset.b64:'';
+  const item={id:uid(),name,desc,price,emoji,badge,img};
+  if(type==='minuman'||type==='makanan'){
+    const catEl=document.getElementById('f-cat');
+    item.cat=catEl?catEl.value:'';
+    DB[type].push(item);
+  } else {
+    item.save=document.getElementById('f-save').value.trim();
+    DB.paket.push(item);
+  }
+  save();closeMod();toast('✅ Menu berhasil ditambahkan!');
+  if(type==='minuman')renderDrinks(drinkFilter);
+  else if(type==='makanan')renderFoods(foodFilter);
+  else renderPaket();
+}
+
+// ─── EDIT MENU ───
+function openEditMenu(id,type){
+  if(!isAdmin)return;
+  const arr=type==='paket'?DB.paket:DB[type];
+  const item=arr.find(i=>i.id===id);
+  if(!item)return;
+  const isPaket=type==='paket';
+  const isMinuman=type==='minuman';
+  const catLabels={coffee:'☕ Coffee',espresso:'🔥 Espresso',noncoffee:'🥤 Non Coffee',jus:'🍊 Jus',mocktail:'🍹 Mocktail',dumdun:'🧋 Dum-Dum',beef:'🥩 Beef',ricebowl:'🍱 Rice Bowl',nasigoreng:'🍳 Nasi Goreng',nasibakar:'🔥 Nasi Bakar',mie:'🍜 Mie',steak:'🍗 Steak',burger:'🍔 Burger'};
+  const catOpts = isMinuman
+    ? ['coffee','espresso','noncoffee','jus','mocktail','dumdun'].map(c=>`<option value="${c}" ${item.cat===c?'selected':''}>${catLabels[c]}</option>`).join('')
+    : !isPaket
+    ? ['beef','ricebowl','nasigoreng','nasibakar','mie','steak','burger'].map(c=>`<option value="${c}" ${item.cat===c?'selected':''}>${catLabels[c]}</option>`).join('')
+    : '';
+  openMod(`
+    <h3>✏️ Edit: ${item.name}</h3>
+
+    <div class="fg">
+      <label>📷 Foto Menu</label>
+      <label class="img-drop" style="padding:16px">
+        <input type="file" accept="image/*,image/heic" onchange="previewImg(this,'prev-edit')">
+        <img class="img-thumb" id="prev-edit" style="${item.img?'display:block':'display:none'};width:100%;max-height:150px;object-fit:cover;border-radius:10px" ${item.img?`src="${item.img}"`:''}}>
+        <p style="margin-top:${item.img?'8':'0'}px;font-size:12px;color:var(--text3);text-align:center">${item.img?'📷 Tap untuk ganti foto':'📷 Tap untuk tambah foto'}</p>
+      </label>
+    </div>
+
+    <div class="fg"><label>Nama Menu</label>
+      <input class="fc" id="e-name" value="${item.name}" style="font-size:16px;padding:14px"></div>
+    <div class="fg"><label>Deskripsi</label>
+      <input class="fc" id="e-desc" value="${item.desc}" style="font-size:15px;padding:13px"></div>
+    <div class="fg"><label>💰 Harga (Rp)</label>
+      <input class="fc" type="number" id="e-price" value="${item.price}" inputmode="numeric" style="font-size:20px;font-weight:800;padding:14px;color:var(--accent)"></div>
+    ${!isPaket?`<div class="fg"><label>Kategori</label><select class="fc" id="e-cat" style="font-size:15px;padding:13px">${catOpts}</select></div>`:''}
+    ${isPaket?`<div class="fg"><label>Keterangan Hemat</label><input class="fc" id="e-save" value="${item.save||''}" style="font-size:15px;padding:13px"></div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="fg"><label>Emoji</label>
+        <input class="fc" id="e-emoji" value="${item.emoji||''}" maxlength="4" style="font-size:22px;text-align:center;padding:12px"></div>
+      <div class="fg"><label>Badge</label>
+        <select class="fc" id="e-badge" style="font-size:14px;padding:13px">
+          <option value="" ${!item.badge?'selected':''}>— Tidak ada</option>
+          <option value="NEW" ${item.badge==='NEW'?'selected':''}>🆕 Baru</option>
+          <option value="HOT" ${item.badge==='HOT'?'selected':''}>🔥 Hot</option>
+        </select></div>
+    </div>
+    <div class="mbtns" style="flex-direction:column;gap:8px;margin-top:20px">
+      <button class="btn-save" onclick="saveEdit('${id}','${type}')" style="padding:16px;font-size:16px">✅ Simpan Perubahan</button>
+      <button class="btn-cancel" onclick="closeMod()" style="padding:13px">Batal</button>
+    </div>
+  `);
+}
+function saveEdit(id,type){
+  const arr=type==='paket'?DB.paket:DB[type];
+  const item=arr.find(i=>i.id===id);if(!item)return;
+  item.name=document.getElementById('e-name').value.trim()||item.name;
+  item.desc=document.getElementById('e-desc').value.trim();
+  item.price=parseInt(document.getElementById('e-price').value)||item.price;
+  item.emoji=document.getElementById('e-emoji').value||item.emoji;
+  item.badge=document.getElementById('e-badge').value;
+  if(type!=='paket'){const c=document.getElementById('e-cat');if(c)item.cat=c.value;}
+  else {const s=document.getElementById('e-save');if(s)item.save=s.value;}
+  const inp=document.querySelector('#mbox input[type=file]');
+  if(inp&&inp.dataset.b64)item.img=inp.dataset.b64;
+  save();closeMod();toast('✅ Menu diperbarui!');
+  if(type==='minuman')renderDrinks(drinkFilter);
+  else if(type==='makanan')renderFoods(foodFilter);
+  else renderPaket();
+}
+function delMenu(id,type){
+  if(!isAdmin)return;
+  if(!confirm('Hapus menu ini?'))return;
+  if(type==='paket')DB.paket=DB.paket.filter(i=>i.id!==id);
+  else DB[type]=DB[type].filter(i=>i.id!==id);
+  save();toast('🗑 Menu dihapus');
+  if(type==='minuman')renderDrinks(drinkFilter);
+  else if(type==='makanan')renderFoods(foodFilter);
+  else renderPaket();
+}
+
+// ─── SYOK ───
+function openAddStok(type){
+  if(!isAdmin){toast('🔒 Login admin dulu');return}
+  openMod(`
+    <h3>✚ Tambah Stok ${type}</h3>
+    <div class="fg"><label>Nama Tambahan</label><input class="fc" id="s-name" placeholder="Extra Shot, dll..."></div>
+    <div class="fg"><label>Harga Tambahan (Rp)</label><input class="fc" type="number" id="s-price" placeholder="5000" min="0"></div>
+    <div class="mbtns">
+      <button class="btn-save" onclick="saveStok('${type}')">Simpan</button>
+      <button class="btn-cancel" onclick="closeMod()">Batal</button>
+    </div>
+  `);
+}
+function saveStok(type){
+  const name=document.getElementById('s-name').value.trim();
+  const price=parseInt(document.getElementById('s-price').value)||0;
+  if(!name||!price){toast('⚠️ Nama & harga wajib!');return}
+  if(!DB.stok[type])DB.stok[type]=[];
+  DB.stok[type].push({id:uid(),name,price});
+  save();closeMod();toast('✅ Stok ditambahkan!');renderStok(type);
+}
+function delStok(type,id){
+  if(!isAdmin)return;
+  DB.stok[type]=DB.stok[type].filter(s=>s.id!==id);
+  save();renderStok(type);toast('🗑 Stok dihapus');
+}
+
+// ─── EVENTS ───
+function openAddEvent(){
+  if(!isAdmin){toast('🔒 Login admin dulu');return}
+  openMod(`
+    <h3>📅 Tambah Event / Info</h3>
+    <div class="fg"><label>Judul</label><input class="fc" id="ev-title" placeholder="Judul event atau info..."></div>
+    <div class="fg"><label>Deskripsi</label><textarea class="fc" id="ev-desc" rows="3" placeholder="Deskripsi lengkap..." style="resize:vertical"></textarea></div>
+    <div class="fg"><label>Tipe</label><select class="fc" id="ev-type"><option value="📢 Informasi">📢 Informasi</option><option value="🎉 Event">🎉 Event</option><option value="🏷️ Promo">🏷️ Promo</option><option value="⚠️ Penting">⚠️ Penting</option><option value="🎊 Special">🎊 Special</option></select></div>
+    <div class="fg"><label>Tanggal</label><input class="fc" type="date" id="ev-date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="mbtns">
+      <button class="btn-save" onclick="saveEvent()">Simpan</button>
+      <button class="btn-cancel" onclick="closeMod()">Batal</button>
+    </div>
+  `);
+}
+function saveEvent(){
+  const title=document.getElementById('ev-title').value.trim();
+  const desc=document.getElementById('ev-desc').value.trim();
+  const type=document.getElementById('ev-type').value;
+  const date=document.getElementById('ev-date').value;
+  if(!title){toast('⚠️ Judul wajib diisi!');return}
+  const d=new Date(date);
+  const fmt=isNaN(d)?date:d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  DB.events.unshift({id:uid(),title,desc,type,date:fmt});
+  save();closeMod();toast('✅ Event/Info ditambahkan!');renderEvents();
+}
+function delEvent(id){
+  if(!isAdmin)return;
+  DB.events=DB.events.filter(e=>e.id!==id);
+  save();renderEvents();toast('🗑 Event dihapus');
+}
+
+// ─── TOAST ───
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600);
+}
+
+// ─── EXPORT DATA ───
+function exportData(){
+  // Buat salinan bersih tanpa foto base64 besar (opsional: sertakan foto)
+  const exportObj = {
+    _exported: new Date().toISOString(),
+    _version: 'diks-menu-v4',
+    minuman: DB.minuman,
+    makanan: DB.makanan,
+    paket: DB.paket,
+    syok: DB.stok || DB.syok,
+    events: DB.events,
+    // Jangan export adminPass demi keamanan
+  };
+  const json = JSON.stringify(exportObj, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const tgl = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'-');
+  a.href = url;
+  a.download = `diks-menu-backup-${tgl}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('✅ Data berhasil di-export!');
+}
+
+// ─── IMPORT DATA ───
+function importData(input){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const data = JSON.parse(e.target.result);
+      // Validasi minimal
+      if(!data.minuman && !data.makanan && !data.paket){
+        toast('❌ File JSON tidak valid!'); return;
+      }
+      if(!confirm(`Import data dari file ini?\n\n📦 ${data.minuman?.length||0} minuman\n🍽️ ${data.makanan?.length||0} makanan\n🎁 ${data.paket?.length||0} paket\n📅 ${data.events?.length||0} event\n\n⚠️ Data yang ada sekarang akan diganti!`)) return;
+      if(data.minuman) DB.minuman = data.minuman;
+      if(data.makanan) DB.makanan = data.makanan;
+      if(data.paket)   DB.paket   = data.paket;
+      if(data.syok)    DB.stok    = data.syok;
+      if(data.stok)    DB.stok    = data.stok;
+      if(data.events)  DB.events  = data.events;
+      save();
+      toast('✅ Data berhasil di-import!');
+      rerenderCurrent();
+      renderEvents();
+    } catch(err){
+      toast('❌ File rusak atau bukan format JSON yang benar!');
+    }
+    // Reset input agar bisa import ulang file yang sama
+    input.value = '';
+  };
+  reader.readAsText(input.files[0]);
+}
+
+// ─── INIT ───
+renderEvents();
+</script>
+
+<script>
+if('serviceWorker' in navigator && location.protocol === 'https:'){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(r=>console.log('SW registered:', r.scope))
+      .catch(e=>console.log('SW error:', e));
+  });
+}
+</script>
+
+</body>
+</html>
