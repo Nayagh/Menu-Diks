@@ -1478,8 +1478,24 @@ function previewImg(input, prevId){
     const img=document.getElementById(prevId);
     img.src=e.target.result;img.style.display='block';
     input.dataset.b64=e.target.result;
+    input.dataset.file=input.files[0].name;
   };
   reader.readAsDataURL(input.files[0]);
+}
+
+async function uploadFoto(input){
+  if(!input||!input.files||!input.files[0]) return null;
+  const file = input.files[0];
+  const ext = file.name.split('.').pop();
+  const fileName = Date.now()+'.'+ext;
+  toast('⏳ Mengupload foto...');
+  const {data, error} = await sb.storage.from('menu-photos').upload(fileName, file, {
+    cacheControl:'3600', upsert:false
+  });
+  if(error){toast('❌ Upload foto gagal: '+error.message);return null;}
+  const {data:{publicUrl}} = sb.storage.from('menu-photos').getPublicUrl(fileName);
+  toast('✅ Foto berhasil diupload!');
+  return publicUrl;
 }
 async function saveNewMenu(type){
   const name=document.getElementById('f-name').value.trim();
@@ -1494,8 +1510,14 @@ async function saveNewMenu(type){
     cat=catEl?catEl.value:type;
   }
   const saveTxt = type==='paket'?(document.getElementById('f-save')?document.getElementById('f-save').value.trim():''):'';
+  // Upload foto ke Supabase Storage
+  const imgInput = document.querySelector('#mbox input[type=file]');
+  let photoUrl = '';
+  if(imgInput && imgInput.files && imgInput.files[0]){
+    photoUrl = await uploadFoto(imgInput) || '';
+  }
   const {error} = await sb.from('menu_items').insert({
-    category:cat, name, deskripsi:desc, price, emoji, badge:badge||saveTxt, photo:'', available:true
+    category:cat, name, deskripsi:desc, price, emoji, badge:badge||saveTxt, photo:photoUrl, available:true
   });
   if(error){toast('❌ Gagal: '+error.message);return;}
   toast('✅ Menu berhasil ditambahkan!');
@@ -1567,9 +1589,15 @@ async function saveEdit(id,type){
   let newCat=item.cat;
   if(type!=='paket'){const c=document.getElementById('e-cat');if(c)newCat=c.value;}
   else{const s=document.getElementById('e-save');if(s)newCat=item.cat;}
+  // Upload foto baru kalau ada
+  const imgInput = document.querySelector('#mbox input[type=file]');
+  let photoUrl = item.img || '';
+  if(imgInput && imgInput.files && imgInput.files[0]){
+    photoUrl = await uploadFoto(imgInput) || photoUrl;
+  }
   const {error} = await sb.from('menu_items').update({
     name:newName, deskripsi:newDesc, price:newPrice,
-    emoji:newEmoji, badge:newBadge, category:newCat
+    emoji:newEmoji, badge:newBadge, category:newCat, photo:photoUrl
   }).eq('id',id);
   if(error){toast('❌ Gagal: '+error.message);return;}
   closeMod();toast('✅ Menu diperbarui!');
