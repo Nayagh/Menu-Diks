@@ -13,6 +13,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ddf0fc">
 <title>Dik's Coffee Shop — Menu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -800,17 +802,59 @@ document.getElementById('hero-logo').src = LOGO_SRC;
   }
 })();
 
-// ─── DB ───
-const KEY='diks_v3';
-let DB = (()=>{
-  try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}
-  return seed();
-})();
+// ─── SUPABASE ───
+const SURL = 'https://bdiaxdftpzabdgsvlkbt.supabase.co';
+const SKEY = 'sb_publishable_ZgGXmTZjqwd0lSSIZbtHXg_d0WhZH1r';
+const sb   = supabase.createClient(SURL, SKEY);
+
+const CAT_MINUMAN = ['espresso','coffee','noncoffee','dumdun','mocktail','jus'];
+const CAT_MAKANAN = ['beef','burger','mie','nasibakar','nasigoreng','ricebowl','steak'];
+
+// ─── DB (struktur sama, tapi data dari Supabase) ───
+let DB = {
+  minuman:[],
+  makanan:[],
+  paket:[],
+  stok:{minuman:[],makanan:[],paket:[]},
+  events:[],
+  adminPass:'diks2019'
+};
 let isAdmin=false;
 let drinkFilter='all';
 let foodFilter='all';
+let _sbLoaded = false;
 
-function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+// Map Supabase row → format DB lokal
+function rowToItem(row){
+  return {
+    id: row.id,
+    name: row.name,
+    desc: row.deskripsi||'',
+    price: row.price||0,
+    emoji: row.emoji||'🍽️',
+    img: row.photo||'',
+    badge: row.badge||'',
+    cat: row.category,
+    save: row.badge||''
+  };
+}
+
+// Load semua data dari Supabase
+async function loadFromSupabase(){
+  try{
+    const {data,error} = await sb.from('menu_items').select('*').order('name');
+    if(error){console.error('Supabase error:',error);return;}
+    DB.minuman = data.filter(r=>CAT_MINUMAN.includes(r.category)).map(rowToItem);
+    DB.makanan = data.filter(r=>CAT_MAKANAN.includes(r.category)).map(rowToItem);
+    DB.paket   = data.filter(r=>r.category==='paket').map(r=>({...rowToItem(r),save:r.badge||''}));
+    _sbLoaded = true;
+  }catch(e){console.error(e);}
+}
+
+function save(){
+  // Tidak perlu simpan ke localStorage, data sudah di Supabase
+  // Fungsi ini tetap ada agar tidak error di kode lama
+}
 function rp(n){return 'Rp '+Number(n).toLocaleString('id-ID')}
 function uid(){return Date.now()+''+Math.random().toString(36).slice(2,6)}
 
@@ -1437,25 +1481,26 @@ function previewImg(input, prevId){
   };
   reader.readAsDataURL(input.files[0]);
 }
-function saveNewMenu(type){
+async function saveNewMenu(type){
   const name=document.getElementById('f-name').value.trim();
   const desc=document.getElementById('f-desc').value.trim();
   const price=parseInt(document.getElementById('f-price').value)||0;
   const emoji=document.getElementById('f-emoji').value||'🍽️';
   const badge=document.getElementById('f-badge').value;
   if(!name||!price){toast('⚠️ Nama & harga wajib diisi!');return}
-  const imgInput=document.querySelector('#mbox input[type=file]');
-  const img=imgInput&&imgInput.dataset.b64?imgInput.dataset.b64:'';
-  const item={id:uid(),name,desc,price,emoji,badge,img};
+  let cat = type;
   if(type==='minuman'||type==='makanan'){
     const catEl=document.getElementById('f-cat');
-    item.cat=catEl?catEl.value:'';
-    DB[type].push(item);
-  } else {
-    item.save=document.getElementById('f-save').value.trim();
-    DB.paket.push(item);
+    cat=catEl?catEl.value:type;
   }
-  save();closeMod();toast('✅ Menu berhasil ditambahkan!');
+  const saveTxt = type==='paket'?(document.getElementById('f-save')?document.getElementById('f-save').value.trim():''):'';
+  const {error} = await sb.from('menu_items').insert({
+    category:cat, name, deskripsi:desc, price, emoji, badge:badge||saveTxt, photo:'', available:true
+  });
+  if(error){toast('❌ Gagal: '+error.message);return;}
+  toast('✅ Menu berhasil ditambahkan!');
+  closeMod();
+  await loadFromSupabase();
   if(type==='minuman')renderDrinks(drinkFilter);
   else if(type==='makanan')renderFoods(foodFilter);
   else renderPaket();
@@ -1511,29 +1556,35 @@ function openEditMenu(id,type){
     </div>
   `);
 }
-function saveEdit(id,type){
+async function saveEdit(id,type){
   const arr=type==='paket'?DB.paket:DB[type];
   const item=arr.find(i=>i.id===id);if(!item)return;
-  item.name=document.getElementById('e-name').value.trim()||item.name;
-  item.desc=document.getElementById('e-desc').value.trim();
-  item.price=parseInt(document.getElementById('e-price').value)||item.price;
-  item.emoji=document.getElementById('e-emoji').value||item.emoji;
-  item.badge=document.getElementById('e-badge').value;
-  if(type!=='paket'){const c=document.getElementById('e-cat');if(c)item.cat=c.value;}
-  else {const s=document.getElementById('e-save');if(s)item.save=s.value;}
-  const inp=document.querySelector('#mbox input[type=file]');
-  if(inp&&inp.dataset.b64)item.img=inp.dataset.b64;
-  save();closeMod();toast('✅ Menu diperbarui!');
+  const newName=document.getElementById('e-name').value.trim()||item.name;
+  const newDesc=document.getElementById('e-desc').value.trim();
+  const newPrice=parseInt(document.getElementById('e-price').value)||item.price;
+  const newEmoji=document.getElementById('e-emoji').value||item.emoji;
+  const newBadge=document.getElementById('e-badge').value;
+  let newCat=item.cat;
+  if(type!=='paket'){const c=document.getElementById('e-cat');if(c)newCat=c.value;}
+  else{const s=document.getElementById('e-save');if(s)newCat=item.cat;}
+  const {error} = await sb.from('menu_items').update({
+    name:newName, deskripsi:newDesc, price:newPrice,
+    emoji:newEmoji, badge:newBadge, category:newCat
+  }).eq('id',id);
+  if(error){toast('❌ Gagal: '+error.message);return;}
+  closeMod();toast('✅ Menu diperbarui!');
+  await loadFromSupabase();
   if(type==='minuman')renderDrinks(drinkFilter);
   else if(type==='makanan')renderFoods(foodFilter);
   else renderPaket();
 }
-function delMenu(id,type){
+async function delMenu(id,type){
   if(!isAdmin)return;
   if(!confirm('Hapus menu ini?'))return;
-  if(type==='paket')DB.paket=DB.paket.filter(i=>i.id!==id);
-  else DB[type]=DB[type].filter(i=>i.id!==id);
-  save();toast('🗑 Menu dihapus');
+  const {error} = await sb.from('menu_items').delete().eq('id',id);
+  if(error){toast('❌ Gagal hapus: '+error.message);return;}
+  toast('🗑 Menu dihapus');
+  await loadFromSupabase();
   if(type==='minuman')renderDrinks(drinkFilter);
   else if(type==='makanan')renderFoods(foodFilter);
   else renderPaket();
@@ -1661,8 +1712,21 @@ function importData(input){
   reader.readAsText(input.files[0]);
 }
 
-// ─── INIT ───
-renderEvents();
+// ─── INIT ─── Load dari Supabase lalu render
+(async function init(){
+  toast('⏳ Memuat menu...');
+  await loadFromSupabase();
+  renderEvents();
+  // Render halaman yang aktif jika bukan home
+  const activePage = document.querySelector('.page.active');
+  if(activePage){
+    const pg = activePage.id.replace('pg-','');
+    if(pg==='minuman') renderDrinks(drinkFilter);
+    else if(pg==='makanan') renderFoods(foodFilter);
+    else if(pg==='paket') renderPaket();
+  }
+  toast('✅ Menu berhasil dimuat!');
+})();
 </script>
 
 <script>
