@@ -849,6 +849,15 @@ async function loadFromSupabase(){
     DB.paket   = data.filter(r=>r.category==='paket').map(r=>({...rowToItem(r),save:r.badge||''}));
     _sbLoaded = true;
   }catch(e){console.error(e);}
+  // Load events
+  try{
+    const {data:evData,error:evErr} = await sb.from('events').select('*').order('created_at',{ascending:false});
+    if(!evErr && evData){
+      DB.events = evData.map(e=>({
+        id:e.id, title:e.title, desc:e.deskripsi||'', type:e.type||'📢 Informasi', date:e.date||''
+      }));
+    }
+  }catch(e){console.error(e);}
 }
 
 function save(){
@@ -1660,7 +1669,7 @@ function openAddEvent(){
     </div>
   `);
 }
-function saveEvent(){
+async function saveEvent(){
   const title=document.getElementById('ev-title').value.trim();
   const desc=document.getElementById('ev-desc').value.trim();
   const type=document.getElementById('ev-type').value;
@@ -1668,13 +1677,20 @@ function saveEvent(){
   if(!title){toast('⚠️ Judul wajib diisi!');return}
   const d=new Date(date);
   const fmt=isNaN(d)?date:d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-  DB.events.unshift({id:uid(),title,desc,type,date:fmt});
-  save();closeMod();toast('✅ Event/Info ditambahkan!');renderEvents();
+  const {error} = await sb.from('events').insert({
+    title, deskripsi:desc, type, date:fmt
+  });
+  if(error){toast('❌ Gagal simpan event: '+error.message);return;}
+  closeMod();toast('✅ Event/Info ditambahkan!');
+  await loadFromSupabase();
+  renderEvents();
 }
-function delEvent(id){
+async function delEvent(id){
   if(!isAdmin)return;
-  DB.events=DB.events.filter(e=>e.id!==id);
-  save();renderEvents();toast('🗑 Event dihapus');
+  const {error} = await sb.from('events').delete().eq('id',id);
+  if(error){toast('❌ Gagal hapus event');return;}
+  await loadFromSupabase();
+  renderEvents();toast('🗑 Event dihapus');
 }
 
 // ─── TOAST ───
