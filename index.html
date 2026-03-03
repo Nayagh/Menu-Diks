@@ -854,7 +854,7 @@ async function loadFromSupabase(){
     const {data:evData,error:evErr} = await sb.from('events').select('*').order('created_at',{ascending:false});
     if(!evErr && evData){
       DB.events = evData.map(e=>({
-        id:e.id, title:e.title, desc:e.deskripsi||'', type:e.type||'📢 Informasi', date:e.date||''
+        id:e.id, title:e.title, desc:e.deskripsi||'', type:e.type||'📢 Informasi', date:e.date||'', photo:e.photo||''
       }));
     }
   }catch(e){console.error(e);}
@@ -1288,6 +1288,7 @@ function renderEvents(){
   empty.style.display='none';
   list.innerHTML=DB.events.map((e,i)=>`
     <div class="info-card" style="animation-delay:${i*0.4}s">
+      ${e.photo?'<img src="'+e.photo+'" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px" onerror="this.style.display=\"none\"">':''}
       <div class="info-tag">${e.type}</div>
       <h3>${e.title}</h3>
       <p>${e.desc}</p>
@@ -1663,6 +1664,11 @@ function openAddEvent(){
     <div class="fg"><label>Deskripsi</label><textarea class="fc" id="ev-desc" rows="3" placeholder="Deskripsi lengkap..." style="resize:vertical"></textarea></div>
     <div class="fg"><label>Tipe</label><select class="fc" id="ev-type"><option value="📢 Informasi">📢 Informasi</option><option value="🎉 Event">🎉 Event</option><option value="🏷️ Promo">🏷️ Promo</option><option value="⚠️ Penting">⚠️ Penting</option><option value="🎊 Special">🎊 Special</option></select></div>
     <div class="fg"><label>Tanggal</label><input class="fc" type="date" id="ev-date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="fg">
+      <label>📸 Foto Event (opsional)</label>
+      <img id="prev-event" src="" style="display:none;width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:8px">
+      <input type="file" id="ev-photo" accept="image/*" onchange="previewImg(this,'prev-event')" style="width:100%;padding:10px;background:rgba(98,174,224,0.08);border:1.5px dashed var(--border2);border-radius:10px;color:var(--text2);font-size:13px;cursor:pointer">
+    </div>
     <div class="mbtns">
       <button class="btn-save" onclick="saveEvent()">Simpan</button>
       <button class="btn-cancel" onclick="closeMod()">Batal</button>
@@ -1677,8 +1683,14 @@ async function saveEvent(){
   if(!title){toast('⚠️ Judul wajib diisi!');return}
   const d=new Date(date);
   const fmt=isNaN(d)?date:d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  // Upload foto event kalau ada
+  const imgInput=document.getElementById('ev-photo');
+  let photoUrl='';
+  if(imgInput&&imgInput.files&&imgInput.files[0]){
+    photoUrl=await uploadFoto(imgInput)||'';
+  }
   const {error} = await sb.from('events').insert({
-    title, deskripsi:desc, type, date:fmt
+    title, deskripsi:desc, type, date:fmt, photo:photoUrl
   });
   if(error){toast('❌ Gagal simpan event: '+error.message);return;}
   closeMod();toast('✅ Event/Info ditambahkan!');
