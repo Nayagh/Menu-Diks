@@ -34,6 +34,13 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
+/* ─── MOBILE OPTIMIZATION ─── */
+@media (max-width:768px){
+  .water-bg,.wave{display:none!important}
+  .bubbles{display:none!important}
+  .cat-card,.mcard,.pkcard,.info-card{animation:none!important;transform:none!important}
+  body{background:#eaf6ff!important}
+}
 body{
   font-family:'Nunito',sans-serif;
   background:linear-gradient(170deg,#eaf6ff 0%,#d5ecfb 25%,#f2faff 55%,#ddeef9 80%,#ebf7ff 100%);
@@ -208,7 +215,7 @@ body{
   box-shadow:var(--shadow2);
   transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s,border-color 0.2s;
   position:relative;overflow:hidden;
-  animation:floatCard 4s ease-in-out infinite;
+  animation:floatCard 8s ease-in-out infinite;
 }
 .cat-card:nth-child(2){animation-delay:-1.4s}
 .cat-card:nth-child(3){animation-delay:-2.7s}
@@ -321,7 +328,7 @@ body{
   box-shadow:var(--shadow2);cursor:default;
   transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s,border-color 0.2s;
   position:relative;
-  animation:floatCard 4s ease-in-out infinite;
+  animation:floatCard 8s ease-in-out infinite;
 }
 .mc:nth-child(2n){animation-delay:-2s}
 .mc:nth-child(3n){animation-delay:-0.8s}
@@ -388,7 +395,7 @@ body.guest .mc-admin{display:none!important}
   display:flex;gap:14px;align-items:center;padding:14px;
   box-shadow:var(--shadow2);margin-bottom:12px;
   position:relative;overflow:hidden;
-  animation:floatCard 4s ease-in-out infinite;
+  animation:floatCard 8s ease-in-out infinite;
   transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s;
 }
 .pkcard:nth-child(2n){animation-delay:-2s}
@@ -793,7 +800,7 @@ document.getElementById('hero-logo').src = LOGO_SRC;
 // ─── BUBBLES ───
 (function(){
   const c = document.getElementById('bubbles');
-  for(let i=0;i<20;i++){
+  for(let i=0;i<8;i++){
     const b = document.createElement('div');
     b.className='bbl';
     const s=Math.random()*55+8;
@@ -840,7 +847,20 @@ function rowToItem(row){
 }
 
 // Load semua data dari Supabase
-async function loadFromSupabase(){
+async function loadFromSupabase(forceRefresh=false){
+  // Cek cache lokal dulu (5 menit)
+  if(!forceRefresh){
+    try{
+      const cached=sessionStorage.getItem('diks_cache');
+      const cachedTime=sessionStorage.getItem('diks_cache_time');
+      if(cached&&cachedTime&&(Date.now()-parseInt(cachedTime))<300000){
+        const c=JSON.parse(cached);
+        DB.minuman=c.minuman||[];DB.makanan=c.makanan||[];
+        DB.paket=c.paket||[];DB.events=c.events||[];
+        _sbLoaded=true;return;
+      }
+    }catch(e){}
+  }
   try{
     const {data,error} = await sb.from('menu_items').select('*').order('name');
     if(error){console.error('Supabase error:',error);return;}
@@ -858,6 +878,13 @@ async function loadFromSupabase(){
       }));
     }
   }catch(e){console.error(e);}
+  // Simpan ke sessionStorage cache
+  try{
+    sessionStorage.setItem('diks_cache',JSON.stringify({
+      minuman:DB.minuman,makanan:DB.makanan,paket:DB.paket,events:DB.events
+    }));
+    sessionStorage.setItem('diks_cache_time',Date.now().toString());
+  }catch(e){}
 }
 
 function save(){
@@ -1532,7 +1559,7 @@ async function saveNewMenu(type){
   if(error){toast('❌ Gagal: '+error.message);return;}
   toast('✅ Menu berhasil ditambahkan!');
   closeMod();
-  await loadFromSupabase();
+  await loadFromSupabase(true);
   if(type==='minuman')renderDrinks(drinkFilter);
   else if(type==='makanan')renderFoods(foodFilter);
   else renderPaket();
