@@ -366,6 +366,29 @@ body{
   box-shadow:0 2px 8px rgba(0,0,0,0.18);
 }
 .mc-badge.new{background:linear-gradient(135deg,#ff6b6b,#cc2200)}
+/* SOLD OUT */
+.mc.sold-out{opacity:0.6;filter:grayscale(30%)}
+.sold-out-stamp{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-25deg);
+  z-index:10;pointer-events:none;
+  background:rgba(200,0,0,0.92);
+  color:white;font-size:13px;font-weight:900;
+  letter-spacing:2px;padding:5px 16px;
+  border-radius:6px;border:2.5px solid rgba(255,255,255,0.7);
+  box-shadow:0 3px 14px rgba(180,0,0,0.45);
+  text-transform:uppercase;white-space:nowrap;
+  font-family:'Nunito',sans-serif;
+}
+.btn-soldout{
+  background:rgba(200,0,0,0.12);border:1.5px solid rgba(200,0,0,0.3);
+  border-radius:999px;padding:3px 9px;font-size:10px;
+  color:#c00;cursor:pointer;font-weight:800;font-family:'Nunito',sans-serif;
+  transition:all 0.2s;
+}
+.btn-soldout.available{
+  background:rgba(34,139,34,0.12);border-color:rgba(34,139,34,0.3);color:green;
+}
 .mc-badge.hot{background:linear-gradient(135deg,#f39c12,#c57a00)}
 
 /* ADMIN EDIT OVERLAY */
@@ -1346,15 +1369,22 @@ function menuCard(item,type,idx){
     ? `<img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
     : '';
   const emojiStyle = item.img ? 'style="display:none"' : '';
+  const isSold = item.available === false || item.available === 'false' || item.available === 0;
+  const soldStamp = isSold ? `<div class="sold-out-stamp">🚫 Habis</div>` : '';
+  const soldBtn = isAdmin
+    ? `<button class="btn-soldout ${isSold?'available':''}" onclick="toggleSoldOut('${item.id}','${type}',${isSold})">${isSold?'✅ Tersedia':'🚫 Habis'}</button>`
+    : '';
   return `
-  <div class="mc" style="animation-delay:${idx*0.08}s">
+  <div class="mc ${isSold?'sold-out':''}" style="animation-delay:${idx*0.08}s">
     <div class="mc-img">
       ${item.badge?`<span class="mc-badge ${item.badge.toLowerCase()}">${item.badge==='NEW'?'🆕 Baru':'🔥 Hot'}</span>`:''}
       ${imgH}
       <div class="mc-emoji" ${emojiStyle}>${item.emoji||'🍽️'}</div>
+      ${soldStamp}
       <div class="mc-admin">
         <button class="edt-btn edit" onclick="openEditMenu('${item.id}','${type}')">✏️</button>
         <button class="edt-btn del" onclick="delMenu('${item.id}','${type}')">🗑</button>
+        ${soldBtn}
       </div>
     </div>
     <div class="mc-body">
@@ -1365,14 +1395,32 @@ function menuCard(item,type,idx){
   </div>`;
 }
 
+async function toggleSoldOut(id, type, isSold){
+  if(!isAdmin){toast('🔒 Login admin dulu');return}
+  const newVal = !isSold;
+  const {error} = await sb.from('menu_items').update({available: newVal}).eq('id', id);
+  if(error){toast('❌ Gagal update: '+error.message);return;}
+  // Update local data
+  const arr = type==='minuman'?DB.minuman:type==='makanan'?DB.makanan:DB.paket;
+  const item = arr.find(i=>i.id===id);
+  if(item) item.available = newVal;
+  if(type==='minuman') renderDrinks(drinkFilter);
+  else if(type==='makanan') renderFoods(foodFilter);
+  else renderPaket();
+  toast(newVal ? '✅ Menu tersedia kembali!' : '🚫 Menu ditandai habis!');
+}
+
 function paketCard(p,idx){
   const imgH = p.img ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:16px">` : '';
   const emojiStyle = p.img ? 'style="display:none"' : '';
+  const isSold = p.available === false || p.available === 'false' || p.available === 0;
+  const soldStamp = isSold ? `<div class="sold-out-stamp" style="font-size:11px;padding:4px 12px">🚫 Habis</div>` : '';
   return `
-  <div class="pkcard" style="animation-delay:${idx*0.1}s">
-    <div class="pkimg">
+  <div class="pkcard ${isSold?'sold-out':''}" style="animation-delay:${idx*0.1}s;position:relative">
+    <div class="pkimg" style="position:relative">
       ${imgH}
       <span ${emojiStyle}>${p.emoji||'🎁'}</span>
+      ${soldStamp}
     </div>
     <div class="pkinfo">
       <div class="pkname">${p.name}</div>
@@ -1382,6 +1430,7 @@ function paketCard(p,idx){
     ${isAdmin?`<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
       <button class="edt-btn edit" onclick="openEditMenu('${p.id}','paket')">✏️</button>
       <button class="edt-btn del" onclick="delMenu('${p.id}','paket')">🗑</button>
+      <button class="btn-soldout ${isSold?'available':''}" onclick="toggleSoldOut('${p.id}','paket',${isSold})">${isSold?'✅':'🚫'}</button>
     </div>`:''}
   </div>`;
 }
