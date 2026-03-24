@@ -911,7 +911,7 @@ async function loadFromSupabase(forceRefresh=false){
     const {data:evData,error:evErr} = await sb.from('events').select('*').order('created_at',{ascending:false});
     if(!evErr && evData){
       DB.events = evData.map(e=>({
-        id:e.id, title:e.title, desc:e.deskripsi||'', type:e.type||'📢 Informasi', date:e.date||'', photo:e.photo||''
+        id:e.id, title:e.title, desc:e.deskripsi||'', type:e.type||'📢 Informasi', date:e.date||'', photo:e.photo||'', video:e.video||''
       }));
     }
   }catch(e){console.error(e);}
@@ -1352,7 +1352,12 @@ function renderEvents(){
   empty.style.display='none';
   list.innerHTML=DB.events.map((e,i)=>`
     <div class="info-card" style="animation-delay:${i*0.4}s">
-      ${e.photo?'<img src="'+e.photo+'" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px" onerror="this.style.display=\"none\"">':''}
+      ${e.photo?`<a href="${e.photo}" target="_blank" rel="noopener" title="Lihat foto lebih besar">
+        <img src="${e.photo}" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px;cursor:zoom-in;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onerror="this.style.display='none'">
+      </a>`:''}
+      ${e.video?`<video controls style="width:100%;border-radius:12px;margin-bottom:12px;max-height:220px;background:#000">
+        <source src="${e.video}" type="video/mp4">
+      </video>`:''}
       <div class="info-tag">${e.type}</div>
       <h3>${e.title}</h3>
       <p>${e.desc}</p>
@@ -1756,8 +1761,14 @@ function openAddEvent(){
     <div class="fg"><label>Tanggal</label><input class="fc" type="date" id="ev-date" value="${new Date().toISOString().slice(0,10)}"></div>
     <div class="fg">
       <label>📸 Foto Event (opsional)</label>
-      <img id="prev-event" src="" style="display:none;width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:8px">
+      <img id="prev-event" src="" style="display:none;width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:8px">
       <input type="file" id="ev-photo" accept="image/*" onchange="previewImg(this,'prev-event')" style="width:100%;padding:10px;background:rgba(98,174,224,0.08);border:1.5px dashed var(--border2);border-radius:10px;color:var(--text2);font-size:13px;cursor:pointer">
+    </div>
+    <div class="fg">
+      <label>🎬 Video Event (opsional)</label>
+      <video id="prev-video" src="" style="display:none;width:100%;border-radius:12px;margin-bottom:8px;max-height:140px" controls></video>
+      <input type="file" id="ev-video" accept="video/*" onchange="previewVideo(this,'prev-video')" style="width:100%;padding:10px;background:rgba(98,174,224,0.08);border:1.5px dashed var(--border2);border-radius:10px;color:var(--text2);font-size:13px;cursor:pointer">
+      <small style="color:var(--text3);font-size:11px;margin-top:4px;display:block">⚠️ Maks. 50MB. Format: MP4, MOV</small>
     </div>
     <div class="mbtns">
       <button class="btn-save" onclick="saveEvent()">Simpan</button>
@@ -1779,8 +1790,15 @@ async function saveEvent(){
   if(imgInput&&imgInput.files&&imgInput.files[0]){
     photoUrl=await uploadFoto(imgInput)||'';
   }
+  // Upload video kalau ada
+  const vidInput=document.getElementById('ev-video');
+  let videoUrl='';
+  if(vidInput&&vidInput.files&&vidInput.files[0]){
+    toast('⏳ Mengupload video...');
+    videoUrl=await uploadVideo(vidInput)||'';
+  }
   const {error} = await sb.from('events').insert({
-    title, deskripsi:desc, type, date:fmt, photo:photoUrl
+    title, deskripsi:desc, type, date:fmt, photo:photoUrl, video:videoUrl
   });
   if(error){toast('❌ Gagal simpan event: '+error.message);return;}
   closeMod();toast('✅ Event/Info ditambahkan!');
